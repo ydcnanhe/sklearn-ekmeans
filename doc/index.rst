@@ -12,8 +12,8 @@ sklekmeans: a scikit-learn extension
 **Date**: |today| **Version**: |version|
 
 **Useful links**:
-`Source Repository <https://github.com/scikit-learn-contrib/sklekmeans>`__ |
-`Issues & Ideas <https://github.com/scikit-learn-contrib/sklekmeans/issues>`__ |
+`Source Repository <https://github.com/ydcnanhe/sklekmeans>`__ |
+`Issues & Ideas <https://github.com/ydcnanhe/sklekmeans/issues>`__ |
 
 This is the documentation for `sklekmeans` to help at extending
 `scikit-learn`. It provides some information on how to build your own custom

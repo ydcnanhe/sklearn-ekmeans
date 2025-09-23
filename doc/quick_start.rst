@@ -17,7 +17,7 @@ To create your package, you need to clone the ``sklekmeans`` repository:
 
 .. prompt:: bash $
 
-  git clone https://github.com/scikit-learn-contrib/sklekmeans.git
+  git clone https://github.com/ydcnanhe/sklekmeans.git
 
 Before to reinitialize your git repository, you need to make the following
 changes. Replace all occurrences of ``sklekmeans`` with the name of you own project if you forked it. You can find all the
