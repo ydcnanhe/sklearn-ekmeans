@@ -35,54 +35,6 @@ Issues = "https://github.com/ydcnanhe/sklekmeans/issues"
 [tool.setuptools_scm]
 version_file = "sklekmeans/_version.py"
 
-[tool.pixi.project]
-channels = ["conda-forge"]
-platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
-
-[tool.pixi.dependencies]
-python = ">=3.9"
-scikit-learn = ">=1.4.2"
-
-[tool.pixi.pypi-dependencies]
-sklekmeans = { path=".", editable=true }
-
-[tool.pixi.feature.lint.dependencies]
-# The version below should be aligned with the one of `.pre-commit-config.yaml`
-black = "23.3.0"
-pre-commit = "3.7.1"
-ruff = "0.4.2"
-
-[tool.pixi.feature.lint.tasks]
-black = { cmd = "black --check --diff sklekmeans && black --check --diff examples" }
-ruff = { cmd = "ruff check --output-format=full sklekmeans && ruff check --output-format=full examples" }
-lint = { depends_on = ["black", "ruff"]}
-
-[tool.pixi.feature.test.dependencies]
-pytest = "*"
-pytest-cov = "*"
-
-[tool.pixi.feature.test.tasks]
-test = { cmd = "pytest -vsl --cov=sklekmeans --cov-report=xml sklekmeans" }
-
-[tool.pixi.feature.doc.dependencies]
-matplotlib = "*"
-numpydoc = "*"
-pydata-sphinx-theme = "*"
-setuptools-scm = ">=8"  # needed for the versioning
-sphinx = "*"
-sphinx-design = "*"
-sphinx-gallery = "*"
-sphinx-prompt = "*"
-
-[tool.pixi.feature.doc.tasks]
-build-doc = { cmd = "make html", cwd = "doc" }
-clean-doc = { cmd = "rm -rf _build", cwd = "doc" }
-
-[tool.pixi.environments]
-doc = ["doc"]
-lint = ["lint"]
-test = ["test"]
-dev = ["doc", "lint", "test"]
 
 [tool.black]
 line-length = 88

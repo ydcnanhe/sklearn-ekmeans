@@ -82,12 +82,13 @@ In any case, developers should endeavor to adhere to scikit-learn's
 Managing your local and continuous integration environment
 ----------------------------------------------------------
 
-Here, we set up for you an repository that uses `pixi`. The `pixi.toml` file defines
-the packages and tasks to be run that we will present below. You can refer to the
-following documentation link to install `pixi`: https://pixi.sh/latest/#installation
+Create and activate a virtual environment and install dependencies locally using `pip`:
 
-Once done, you can refer to the documentation to get started but we provide the
-command below to interact with the main task requested to develop your package.
+.. prompt:: bash $
+
+  python -m venv .venv
+  source .venv/bin/activate  # (On Windows: .venv\\Scripts\\activate)
+  pip install -e .[dev]
 
 Edit the documentation
 ----------------------
@@ -96,11 +97,11 @@ Edit the documentation
 
 The documentation is created using Sphinx_. In addition, the examples are
 created using ``sphinx-gallery``. Therefore, to generate locally the
-documentation, you can leverage the following `pixi` task:
+documentation, run:
 
 .. prompt:: bash $
 
-  pixi run build-doc
+  sphinx-build -b html doc doc/_build/html
 
 The documentation is made of:
 
@@ -121,7 +122,7 @@ To run the tests locally, you can use the following command:
 
 .. prompt:: bash $
 
-  pixi run test
+  pytest -vsl sklekmeans
 
 It will use `pytest` under the hood to run the package tests.
 
@@ -129,43 +130,24 @@ In addition, you have a linter task to check the code consistency in terms of st
 
 .. prompt:: bash $
 
-  pixi run lint
+  ruff check sklekmeans examples
+  black --check sklekmeans examples
 
-Activating the development environment
---------------------------------------
-
-In the case that you don't want to use the `pixi run` commands and directly interact
-with the usual python tools, you can activate the development environment:
-
-.. prompt:: bash $
-
-  pixi shell -e dev
-
-This will activate an environment containing the dependencies needed to run the linters,
-tests, and build the documentation. So for instance, you can run the tests with:
-
-.. prompt:: bash $
-
-  pytest -vsl sklekmeans
-
-In this case, you can even use pre-commit before using git. You will need to initialize
-it with:
+Pre-commit hooks (optional) can be enabled with:
 
 .. prompt:: bash $
 
   pre-commit install
 
-Setup the continuous integration
---------------------------------
+Continuous Integration
+----------------------
 
-The project template already contains configuration files of the continuous
-integration system. It leverage the above pixi commands and run on GitHub Actions.
-In short, it will:
+CI (GitHub Actions) should:
 
-* run the tests on the different platforms (Linux, MacOS, Windows) and upload the
-  coverage report to codecov.io;
-* check the code style (linter);
-* build the documentation and deploy it automatically on GitHub Pages.
+* run tests (pytest) on multiple platforms;
+* upload coverage to codecov.io;
+* run linters (ruff, black) and style checks;
+* build and deploy documentation to GitHub Pages.
 
 Publish your package
 ====================
