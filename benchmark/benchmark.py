@@ -12,11 +12,16 @@ Run:
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
 from sklekmeans import EKMeans as EKM
+
+try:
+    import matplotlib.pyplot as plt
+    _HAVE_PLT = True
+except Exception:
+    _HAVE_PLT = False
 
 N_REPEATS = 30  # Monte Carlo repetitions
 N_SAMPLES = [2000, 50, 30]  # Strong imbalance
@@ -50,7 +55,7 @@ for seed in range(N_REPEATS):
     ari_results["EKM"].append(adjusted_rand_score(y_true, labels_ekm))
     sil_results["EKM"].append(silhouette_score(X, labels_ekm))
 # ------------------
-# 统计结果
+# Statistical Summary
 # ------------------
 def stats(arr):
     return np.mean(arr), np.std(arr)
@@ -60,42 +65,45 @@ print("EKM    ARI      : {:.3f} ± {:.3f}".format(*stats(ari_results["EKM"])))
 print("KMeans Silhouette: {:.3f} ± {:.3f}".format(*stats(sil_results["KMeans"])))
 print("EKM    Silhouette: {:.3f} ± {:.3f}".format(*stats(sil_results["EKM"])))
 # ------------------
-# 绘制 Boxplot
+# Plot Boxplot
 # ------------------
-fig, axs = plt.subplots(1, 2, figsize=(12, 5))
-# ARI
-axs[0].boxplot(
-    [ari_results["KMeans"], ari_results["EKM"]], 
+if _HAVE_PLT:
+    fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+    # ARI
+    axs[0].boxplot(
+        [ari_results["KMeans"], ari_results["EKM"]], 
     labels=["KMeans", "EKM"], patch_artist=True,
     boxprops=dict(facecolor="lightblue"), medianprops=dict(color="red")
 )
-axs[0].set_title("Adjusted Rand Index (ARI) Distribution")
-axs[0].set_ylabel("ARI Score")
-# Silhouette
-axs[1].boxplot(
-    [sil_results["KMeans"], sil_results["EKM"]], 
-    labels=["KMeans", "EKM"], patch_artist=True,
-    boxprops=dict(facecolor="lightgreen"), medianprops=dict(color="red")
-)
-axs[1].set_title("Silhouette Distribution")
-axs[1].set_ylabel("Silhouette Score")
-plt.suptitle("Monte Carlo Benchmark ({} runs)".format(N_REPEATS), fontsize=14)
-plt.show()
+    axs[0].set_title("Adjusted Rand Index (ARI) Distribution")
+    axs[0].set_ylabel("ARI Score")
+    # Silhouette
+    axs[1].boxplot(
+        [sil_results["KMeans"], sil_results["EKM"]], 
+        labels=["KMeans", "EKM"], patch_artist=True,
+        boxprops=dict(facecolor="lightgreen"), medianprops=dict(color="red")
+    )
+    axs[1].set_title("Silhouette Distribution")
+    axs[1].set_ylabel("Silhouette Score")
+    plt.suptitle("Monte Carlo Benchmark ({} runs)".format(N_REPEATS), fontsize=14)
+    plt.show()
 
 # ------------------
 # Cluster result visualization (last run data retained in loop scope)
-fig2, axes2 = plt.subplots(1, 3, figsize=(15, 4))
-axes2[0].scatter(X[:, 0], X[:, 1], c=y_true, s=10, cmap='tab10', alpha=0.75)
-axes2[0].set_title('True Labels')
-axes2[1].scatter(X[:, 0], X[:, 1], c=labels_km, s=10, cmap='tab10', alpha=0.75)
-axes2[1].scatter(km.cluster_centers_[:, 0], km.cluster_centers_[:, 1], c='black', s=120, marker='X', edgecolor='white', linewidths=1)
-axes2[1].set_title('KMeans Clusters')
-axes2[2].scatter(X[:, 0], X[:, 1], c=labels_ekm, s=10, cmap='tab10', alpha=0.75)
-axes2[2].scatter(ekm.cluster_centers_[:, 0], ekm.cluster_centers_[:, 1], c='black', s=120, marker='X', edgecolor='white', linewidths=1)
-axes2[2].set_title('EKM Clusters')
-for ax in axes2:
-    ax.set_xticks([])
-    ax.set_yticks([])
-fig2.suptitle('Cluster Result Visualization (Last Run)', fontsize=14)
-fig2.tight_layout()
-plt.show()
+    fig2, axes2 = plt.subplots(1, 3, figsize=(15, 4))
+    axes2[0].scatter(X[:, 0], X[:, 1], c=y_true, s=10, cmap='tab10', alpha=0.75)
+    axes2[0].set_title('True Labels')
+    axes2[1].scatter(X[:, 0], X[:, 1], c=labels_km, s=10, cmap='tab10', alpha=0.75)
+    axes2[1].scatter(km.cluster_centers_[:, 0], km.cluster_centers_[:, 1], c='black', s=120, marker='X', edgecolor='white', linewidths=1)
+    axes2[1].set_title('KMeans Clusters')
+    axes2[2].scatter(X[:, 0], X[:, 1], c=labels_ekm, s=10, cmap='tab10', alpha=0.75)
+    axes2[2].scatter(ekm.cluster_centers_[:, 0], ekm.cluster_centers_[:, 1], c='black', s=120, marker='X', edgecolor='white', linewidths=1)
+    axes2[2].set_title('EKM Clusters')
+    for ax in axes2:
+        ax.set_xticks([])
+        ax.set_yticks([])
+    fig2.suptitle('Cluster Result Visualization (Last Run)', fontsize=14)
+    fig2.tight_layout()
+    plt.show()
+else:
+    print("[Info] matplotlib not available; skipping plots.")
