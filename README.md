@@ -92,6 +92,11 @@ The latest HTML documentation is hosted on GitHub Pages:
 
 Badges above reflect build status; if the link 404s, wait for the docs CI to finish.
 
+References
+----------
+- [1] Y. He. *An Equilibrium Approach to Clustering: Surpassing Fuzzy C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems, 2025.
+- [2] Y. He. *Imbalanced Data Clustering Using Equilibrium K-Means*, arXiv, 2024.
+
 License
 -------
 BSD 3-Clause
