@@ -26,7 +26,7 @@ for several algorithms, including EKMeans and MiniBatchEKMeans.
 
 It is intended for the gallery and requires matplotlib to render plots.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-93
+.. GENERATED FROM PYTHON SOURCE LINES 11-92
 
 
 
@@ -124,10 +124,9 @@ It is intended for the gallery and requires matplotlib to render plots.
         main()
 
 
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.505 seconds)
+   **Total running time of the script:** (0 minutes 0.444 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_imbalanced_ekmeans.py:
