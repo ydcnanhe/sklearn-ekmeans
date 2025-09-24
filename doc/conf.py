@@ -25,7 +25,7 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.napoleon",
     "sphinx_design",
-    "sphinx-prompt",
+    "sphinx_prompt",
     "sphinx_gallery.gen_gallery",
     "numpydoc",
 ]
@@ -53,7 +53,7 @@ html_sidebars = {
 
 html_theme_options = {
     "external_links": [],
-    "github_url": "https://github.com/ydcnanhe/sklekmeans",
+    "github_url": "https://github.com/ydcnanhe/sklearn-ekmeans",
     # "twitter_url": "https://twitter.com/pandas_dev",
     "use_edit_page_button": True,
     "show_toc_level": 1,
@@ -62,7 +62,7 @@ html_theme_options = {
 
 html_context = {
     "github_user": "ydcnanhe",
-    "github_repo": "sklekmeans",
+    "github_repo": "sklearn-ekmeans",
     "github_version": "main",
     "doc_path": "doc",
 }

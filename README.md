@@ -4,6 +4,7 @@ sklekmeans - Equilibrium K-Means for scikit-learn
 ![tests](https://github.com/ydcnanhe/sklekmeans/actions/workflows/python-app.yml/badge.svg)
 [![codecov](https://codecov.io/gh/ydcnanhe/sklekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklekmeans)
 ![doc](https://github.com/ydcnanhe/sklekmeans/actions/workflows/deploy-gh-pages.yml/badge.svg)
+[![docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 `sklekmeans` provides batch and mini-batch implementations of the
 Equilibrium K-Means (EKMeans) clustering algorithm. The method introduces
@@ -87,7 +88,7 @@ Documentation
 -------------
 The latest HTML documentation is hosted on GitHub Pages:
 
-https://ydcnanhe.github.io/sklearn-ekmeans
+[ydcnanhe.github.io/sklearn-ekmeans](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 Badges above reflect build status; if the link 404s, wait for the docs CI to finish.
 
