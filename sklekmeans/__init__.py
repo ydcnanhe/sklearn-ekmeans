@@ -18,4 +18,3 @@ __all__ = ["EKMeans", "MiniBatchEKMeans"]
 
 # Light-weight version attribute for now; adjust if setuptools_scm is adopted.
 __version__ = "0.1.0"
-

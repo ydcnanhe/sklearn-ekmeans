@@ -96,6 +96,7 @@ def _calc_weight_numpy(D2, alpha):
         W[i, pos] = 1.0
     return W
 
+
 if _NUMBA_AVAILABLE:  # pragma: no cover - exercised only when numba present
 
     @njit(parallel=True, fastmath=True)
@@ -129,6 +130,7 @@ if _NUMBA_AVAILABLE:  # pragma: no cover - exercised only when numba present
                     W[i, k] = 0.0
                 W[i, pos] = 1.0
         return W
+
 
 ###############################################################################
 # Core estimator: Equilibrium K-Means
@@ -392,7 +394,7 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
                     pass
             return _calc_weight_numba(D2, alpha)  # type: ignore
         return _calc_weight_numpy(D2, alpha)
-    
+
     def _objective(self, X, cluster_centers, alpha):
         D2 = _pairwise_distance(X, cluster_centers, self.metric) ** 2
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
@@ -451,11 +453,11 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
                 for k in range(K):
                     sw = np.maximum(np.sum(W[:, k]), np.finfo(float).eps)
                     centers[k] = (W[:, k] @ X) / sw
-                
+
                 if verbose:
                     obj = self._objective(X, centers, alpha)
                     print(f"Iteration {it}, objective/loss {obj:<.3e}.")
-                
+
                 center_shift_tot = np.linalg.norm(centers - prev, "fro")
                 if self.tol > 0.0 and center_shift_tot <= Var_X * self.tol:
                     if verbose:
@@ -466,8 +468,9 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
                     break
                 else:
                     if verbose and it == self.max_iter - 1:
-                        print(f"Reached max_iter {self.max_iter} (center shift / var(X)"
-                              f"{center_shift_tot / Var_X:<.3e} > tol {self.tol:<.3e})."
+                        print(
+                            f"Reached max_iter {self.max_iter} (center shift / var(X)"
+                            f"{center_shift_tot / Var_X:<.3e} > tol {self.tol:<.3e})."
                         )
                 prev = centers.copy()
             # evaluate objective
@@ -580,7 +583,7 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         ----------
         X : array-like of shape (n_samples, n_features)
             Input samples.
-        
+
         Returns
         -------
         U : ndarray of shape (n_samples, n_clusters)
@@ -1049,7 +1052,9 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
             Updated estimator.
         """
         # feature count consistency is enforced on subsequent calls.
-        if not hasattr(self, "cluster_centers_") and not hasattr(self, "n_features_in_"):
+        if not hasattr(self, "cluster_centers_") and not hasattr(
+            self, "n_features_in_"
+        ):
             Xb = validate_data(
                 self,
                 X_batch,
