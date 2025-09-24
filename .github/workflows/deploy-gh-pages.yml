@@ -1,43 +1,55 @@
-name: Documentation
+name: Deploy documentation to GitHub Pages
 
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  deploy-gh-pages:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-    - name: Install doc dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .[docs]
-    - name: Build documentation
-      working-directory: doc
-      run: |
-        rm -rf _build || true
-        sphinx-build -E -b html . _build/html
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install doc dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[docs]
+      - name: Build documentation
+        working-directory: doc
+        run: |
+          rm -rf _build || true
+          sphinx-build -E -b html . _build/html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc/_build/html
 
-    - name: Update the main gh-page website
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-      uses: peaceiris/actions-gh-pages@v4.0.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./doc/_build/html
-        commit_message: "[ci skip] ${{ github.event.head_commit.message }}"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
