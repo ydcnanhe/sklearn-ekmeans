@@ -41,6 +41,8 @@
    "pydata-sphinx-theme",
    "sphinx-gallery",
    "sphinx-design",
+   "sphinx-copybutton",
+   "sphinx-prompt",
    "numpydoc",
    "matplotlib",
 ]
@@ -52,7 +54,7 @@ all = ["sklekmeans[dev,docs,speed]"]
  [project.urls]
  Homepage = "https://github.com/ydcnanhe/sklearn-ekmeans"
  Documentation = "https://ydcnanhe.github.io/sklearn-ekmeans"
- Source = "https://github.com/ydcnanhe/sklearn-ekmeans/sklekmeans/"
+ Source = "https://github.com/ydcnanhe/sklearn-ekmeans/tree/main/sklekmeans"
 
  [tool.black]
  line-length = 88
