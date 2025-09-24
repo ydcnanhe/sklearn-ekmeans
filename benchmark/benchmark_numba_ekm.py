@@ -10,10 +10,12 @@ Run:
     python benchmark/benchmark_numba_ekm.py
 """
 
-import time
 import statistics
+import time
+
 import numpy as np
-from sklekmeans import EKMeans as EKM 
+
+from sklekmeans import EKMeans as EKM
 
 try:
     from numba import njit  # noqa: F401

@@ -15,13 +15,14 @@ Run:
 """
 
 import time
+
 import numpy as np
 from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
+
 from sklekmeans import EKMeans as EKM
 from sklekmeans import MiniBatchEKMeans as MiniBatchEKM
 
 try:
-    import matplotlib.pyplot as plt
     _HAVE_PLT = True
 except Exception:
     _HAVE_PLT = False

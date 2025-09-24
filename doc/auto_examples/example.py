@@ -11,6 +11,7 @@ Run with::
 """
 
 import numpy as np
+
 from sklekmeans import EKMeans, MiniBatchEKMeans
 
 # Generate synthetic data

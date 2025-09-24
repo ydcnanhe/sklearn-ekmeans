@@ -26,17 +26,18 @@ weight matrix ``W_`` is also stored after fitting.
 """
 
 from __future__ import annotations
+
 import warnings
 from numbers import Integral, Real
-import numpy as np
 
-from sklearn.base import TransformerMixin, ClusterMixin, BaseEstimator, _fit_context
-from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
-from sklearn.utils import check_array, check_random_state
-from sklearn.utils._param_validation import Interval, StrOptions, Hidden
-from sklearn.utils.validation import check_is_fitted, validate_data
-from sklearn.exceptions import ConvergenceWarning
+import numpy as np
+from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin, _fit_context
 from sklearn.cluster import kmeans_plusplus
+from sklearn.exceptions import ConvergenceWarning
+from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
+from sklearn.utils import check_random_state
+from sklearn.utils._param_validation import Interval, StrOptions
+from sklearn.utils.validation import check_is_fitted, validate_data
 
 # Optional numba acceleration (soft dependency)
 try:  # pragma: no cover - optional path

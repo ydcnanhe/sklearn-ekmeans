@@ -9,10 +9,17 @@ It is intended for the gallery and requires matplotlib to render plots.
 
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import (
+	DBSCAN,
+	AgglomerativeClustering,
+	KMeans,
+	MiniBatchKMeans,
+	SpectralClustering,
+)
 from sklearn.datasets import make_blobs
-from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering, AgglomerativeClustering, DBSCAN
+
 from sklekmeans import EKMeans, MiniBatchEKMeans
 
 

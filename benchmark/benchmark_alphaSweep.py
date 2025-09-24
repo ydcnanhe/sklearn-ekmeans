@@ -14,9 +14,10 @@ Outputs summary statistics and plots mean metric values vs the
 """
 
 import numpy as np
-from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
 from sklearn.metrics import adjusted_rand_score, silhouette_score
+
 from sklekmeans import EKMeans as EKM
 
 try:

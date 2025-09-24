@@ -14,18 +14,24 @@ Example (Windows cmd):
 Silhouette can be expensive (O(n^2)); enable with --silhouette and optionally subsample.
 """
 from __future__ import annotations
+
 import argparse
 import time
 from dataclasses import dataclass
 from typing import List, Tuple
+
 import numpy as np
-from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score, silhouette_score
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
-from sklekmeans import EKMeans as EKM 
+from sklearn.metrics import (
+    adjusted_rand_score,
+    normalized_mutual_info_score,
+    silhouette_score,
+)
+
+from sklekmeans import EKMeans as EKM
 
 try:
-    import matplotlib.pyplot as plt  # type: ignore
     _MPL = True
 except Exception:  # pragma: no cover
     _MPL = False

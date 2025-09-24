@@ -60,19 +60,26 @@ all = ["sklekmeans[dev,docs,speed]"]
  line-length = 88
  target-version = ["py39", "py310", "py311", "py312"]
 
- [tool.ruff]
- line-length = 88
- target-version = "py39"
- select = [
-   "E",  # pycodestyle errors
-   "F",  # pyflakes
-   "I",  # isort
-   "W",  # warnings
-]
-ignore = ["E203", "E266", "E501"]
+[tool.ruff]
+line-length = 88
+target-version = "py39"
 
- [tool.ruff.isort]
- known-first-party = ["sklekmeans"]
+[tool.ruff.lint]
+select = [
+  "E",  # pycodestyle errors
+  "F",  # pyflakes
+  "I",  # isort
+  "W",  # warnings
+]
+ignore = [
+  "E203",  # whitespace before ':'
+  "E266",  # too many leading '#' for block comment
+  "E501",  # line too long
+  "W293",  # blank line contains whitespace (temporarily ignored)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["sklekmeans"]
 
  [tool.pytest.ini_options]
  addopts = "-v --doctest-modules --cov=sklekmeans --cov-report=term-missing"

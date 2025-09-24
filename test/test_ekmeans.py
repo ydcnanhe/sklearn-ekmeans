@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
 from sklearn.utils.estimator_checks import check_estimator
+
 from sklekmeans import EKMeans, MiniBatchEKMeans
+
 
 def test_ekm_estimator_checks():
     check_estimator(EKMeans())

@@ -12,9 +12,10 @@ Run:
 """
 
 import numpy as np
-from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
 from sklearn.metrics import adjusted_rand_score, silhouette_score
+
 from sklekmeans import EKMeans as EKM
 
 try:
@@ -71,7 +72,7 @@ if _HAVE_PLT:
     fig, axs = plt.subplots(1, 2, figsize=(12, 5))
     # ARI
     axs[0].boxplot(
-        [ari_results["KMeans"], ari_results["EKM"]], 
+        [ari_results["KMeans"], ari_results["EKM"]],
     labels=["KMeans", "EKM"], patch_artist=True,
     boxprops=dict(facecolor="lightblue"), medianprops=dict(color="red")
 )
@@ -79,7 +80,7 @@ if _HAVE_PLT:
     axs[0].set_ylabel("ARI Score")
     # Silhouette
     axs[1].boxplot(
-        [sil_results["KMeans"], sil_results["EKM"]], 
+        [sil_results["KMeans"], sil_results["EKM"]],
         labels=["KMeans", "EKM"], patch_artist=True,
         boxprops=dict(facecolor="lightgreen"), medianprops=dict(color="red")
     )
