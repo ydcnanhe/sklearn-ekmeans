@@ -1,33 +1,41 @@
-"""Equilibrium K-Means clustering.
+"""Equilibrium K-Means clustering algorithms.
 
-Implementation of Equilibrium K-Means (EKM) and its mini-batch
-variant.
+This module implements Equilibrium K-Means (EKMeans) and a mini-batch
+variant (:class:`MiniBatchEKMeans`). The objective modifies standard
+k-means by introducing an equilibrium weighting scheme controlled by a
+parameter ``alpha`` that can improve robustness on imbalanced datasets.
+
+The implementation follows the structure of scikit-learn's k-means
+estimators where practical, but the internal update rules differ.
 
 References
 ----------
-He Yudong, "An Equilibrium Approach to Clustering: Surpassing Fuzzy C-Means on
-Imbalanced Data", IEEE Transactions on Fuzzy Systems, 2025.
-
-He Yudong, "Imbalanced Data Clustering Using Equilibrium K-Means", arXiv, 2024.
+.. [1] Y. He. *An Equilibrium Approach to Clustering: Surpassing Fuzzy
+    C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems,
+    2025.
+.. [2] Y. He. *Imbalanced Data Clustering Using Equilibrium K-Means*,
+    arXiv, 2024.
 
 Notes
 -----
-This module mirrors the structure of :mod:`sklearn.cluster._kmeans` where
-reasonable, but the internal objective and update rules differ.
+Both estimators expose helper methods ``membership`` and
+``fit_membership`` that return soft assignment matrices derived from the
+exponential weighting prior to equilibrium correction. The equilibrium
+weight matrix ``W_`` is also stored after fitting.
 """
 
 from __future__ import annotations
-
 import warnings
 from numbers import Integral, Real
 import numpy as np
 
-from sklearn.base import BaseEstimator, ClusterMixin, _fit_context
+from sklearn.base import TransformerMixin, ClusterMixin, BaseEstimator, _fit_context
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 from sklearn.utils import check_array, check_random_state
 from sklearn.utils._param_validation import Interval, StrOptions, Hidden
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, validate_data
 from sklearn.exceptions import ConvergenceWarning
+from sklearn.cluster import kmeans_plusplus
 
 # Optional numba acceleration (soft dependency)
 try:  # pragma: no cover - optional path
@@ -58,9 +66,9 @@ def _kmeans_plus_like(X, n_clusters, *, metric="euclidean", random_state=None):
     rng = check_random_state(random_state)
     n_samples, n_features = X.shape
     centers = np.empty((n_clusters, n_features), dtype=float)
-    # choose first at random
-    idx = rng.randint(n_samples)
-    centers[0] = X[idx]
+    # choose first center uniformly
+    first = rng.randint(n_samples)
+    centers[0] = X[first]
     for k in range(1, n_clusters):
         D2 = np.min(_pairwise_distance(X, centers[:k], metric) ** 2, axis=1)
         total = np.sum(D2)
@@ -124,42 +132,65 @@ if _NUMBA_AVAILABLE:  # pragma: no cover - exercised only when numba present
 # Core estimator: Equilibrium K-Means
 
 
-class EKMeans(BaseEstimator, ClusterMixin):
+class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
     """Equilibrium K-Means clustering.
 
-    A robust variant of k-means designed for imbalanced datasets. The method
-    uses an equilibrium weighting scheme parameterised by ``alpha``.
+    A robust variant of k-means designed for imbalanced datasets. The
+    method uses an equilibrium weighting scheme parameterised by
+    ``alpha``. For ``alpha='dvariance'`` a heuristic based on the data
+    variance is used.
 
     Parameters
     ----------
     n_clusters : int, default=8
-        Number of clusters.
+        The number of clusters to form as well as the number of centroids
+        to generate.
     metric : {'euclidean', 'manhattan'}, default='euclidean'
-        Distance metric used for assignment and updates.
+        Distance metric used both to assign points to clusters and to
+        update centers. Manhattan distance can be more robust to outliers
+        in some settings but increases cost relative to vectorised
+        squared Euclidean computations.
     alpha : float or {'dvariance'}, default=0.5
-        Weighting parameter. If ``'dvariance'`` a heuristic based on the
-        data variance is used: ``scale / mean(dist(X, mean(X))**2)``.
+        Equilibrium weighting parameter. If set to
+        the string ``'dvariance'`` a heuristic value ``scale / mean(d^2)``
+        is computed where ``d^2`` are squared distances to the global
+        mean.
     scale : float, default=2.0
-        Scaling factor when ``alpha='dvariance'``.
+        Multiplicative factor applied in the ``'dvariance'`` heuristic.
+        Higher values yield larger effective ``alpha`` resulting in
+        crisper assignments.
     max_iter : int, default=300
-        Maximum number of iterations per run.
+        Maximum number of EM-like update iterations for a single
+        initialisation.
     tol : float, default=1e-4
-        Relative tolerance on Frobenius norm change in centers to declare
-        convergence.
+        Relative tolerance (scaled by average feature variance of the
+        data) on the Frobenius norm of the change in ``cluster_centers_``
+        to declare convergence.
     n_init : int, default=1
-        Number of initialisations. The best (lowest approximate objective)
-        run is kept.
+        Number of random initialisations to perform. The run with the
+        lowest internal equilibrium objective is retained. Increasing
+        ``n_init`` improves robustness to local minima at additional
+        computational cost.
     init : {'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
-        Initialisation strategy. ``'k-means++'`` is only exact for the Euclidean
-        metric; for Manhattan distance a metric-compatible variant is used.
+        Method for initialization.
+        * 'k-means++' : use a probabilistic seeding adapted for the
+          chosen metric.
+        * 'random' : choose ``n_clusters`` observations at random.
+        * ndarray : user provided initial centers.
     random_state : int, RandomState instance or None, default=None
-        Random seed.
+        Controls the randomness of initial center selection and the
+        heuristic alpha sampling (when applicable). Pass an int for
+        reproducible results.
     use_numba : bool, default=False
-        Whether to use numba accelerated weight computation when available.
+        If ``True`` and :mod:`numba` is installed (see ``[speed]`` extra),
+        use a JIT-compiled kernel for weight computation.
     numba_threads : int or None, default=None
-        If provided and numba is available, sets the number of threads.
+        If provided sets the number of threads used by numba parallel
+        sections. Ignored if numba is unavailable or ``use_numba`` is
+        ``False``.
     verbose : int, default=0
-        Verbosity mode.
+        Verbosity level. ``0`` is silent; higher values print progress
+        each iteration.
 
     Attributes
     ----------
@@ -177,6 +208,10 @@ class EKMeans(BaseEstimator, ClusterMixin):
         Equilibrium weights after fitting.
     U_ : ndarray of shape (n_samples, n_clusters)
         Membership matrix (soft assignments based on exp(-alpha * d^2)).
+        Each row sums to 1.
+    n_features_in_ : int
+        Number of features seen during :meth:`fit`. Set by the first call to
+        :meth:`fit` and used for input validation in subsequent operations.
 
     Methods
     -------
@@ -195,25 +230,18 @@ class EKMeans(BaseEstimator, ClusterMixin):
 
     (Internal helpers: `_resolve_alpha`, `_init_centers`, `_calc_weight`, `_objective` are internal and not public API.)
 
-    Note
+    Notes
     -----
-    This equilibrium K-Means implementation is designed to be robust to imbalanced datasets
-    by using an equilibrium weighting scheme.
-
-    The average complexity is given by O(k^2 n T), where k is the number of clusters, n is 
-    the number of samples, and T is the number of iterations.
-
-    EKM is slower than standard k-means due to the calculation of the membership and weights matrices.
-
-    EKM is theoretically more effective to imbalanced cluster sizes than standard k-means, but may still be
-    sensitive to initialization and hyperparameter (i.e., alpha) settings.
-
-    In EKM falls in local minima. That's why it can be useful to restart it several times.
+    The average complexity is roughly :math:`O(k^2 n T)` due to the
+    weight update per iteration, where ``k`` is the number of clusters,
+    ``n`` the number of samples and ``T`` the number of iterations. The
+    algorithm can fall into local minima; using ``n_init>1`` is
+    recommended.
 
     Examples
     --------
 
-    >>> from sklearn.cluster import EKMeans
+    >>> from sklekmeans import EKMeans
     >>> import numpy as np
     >>> X = np.array([[1, 2], [1, 4], [1, 0],
     ...               [10, 2], [10, 4], [10, 0]])
@@ -324,10 +352,7 @@ class EKMeans(BaseEstimator, ClusterMixin):
             return centers.copy()
         if self.init == "k-means++":
             if self.metric == "euclidean":
-                # defer import to avoid cycle
-                from ._kmeans import kmeans_plusplus as _kpp
-
-                centers, _ = _kpp(
+                centers, _ = kmeans_plusplus(
                     X, self.n_clusters, random_state=rng, sample_weight=None
                 )
                 centers = centers.astype(float, copy=False)
@@ -375,6 +400,7 @@ class EKMeans(BaseEstimator, ClusterMixin):
         return obj
 
     # ------------------------------------------------------------------
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None):
         """Compute Equilibrium K-Means clustering.
 
@@ -390,13 +416,21 @@ class EKMeans(BaseEstimator, ClusterMixin):
         self : object
             Fitted estimator.
         """
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=True,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         rng = check_random_state(self.random_state)
         n_samples, n_features = X.shape
         K = self.n_clusters
         alpha = self._resolve_alpha(X)
         verbose = self.verbose
-        Var_X =  np.mean(np.var(X, axis=0))
+        Var_X = np.mean(np.var(X, axis=0))
 
         best_obj = np.inf
         best_centers = None
@@ -482,7 +516,15 @@ class EKMeans(BaseEstimator, ClusterMixin):
             Index of the closest learned cluster center for each sample.
         """
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         D = _pairwise_distance(X, self.cluster_centers_, self.metric)
         labels = np.argmin(D, axis=1)
         distinct_clusters = len(set(labels))
@@ -510,7 +552,15 @@ class EKMeans(BaseEstimator, ClusterMixin):
             Pairwise distances to `cluster_centers_` using the configured metric.
         """
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         return _pairwise_distance(X, self.cluster_centers_, self.metric)
 
     def fit_predict(self, X, y=None):
@@ -528,9 +578,22 @@ class EKMeans(BaseEstimator, ClusterMixin):
         ----------
         X : array-like of shape (n_samples, n_features)
             Input samples.
+        
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Row-stochastic soft assignment matrix (rows sum to 1).
         """
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         alpha = self.alpha_
         D2 = self.transform(X) ** 2
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
@@ -547,58 +610,98 @@ class EKMeans(BaseEstimator, ClusterMixin):
 # Mini-batch variant
 
 
-class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
+class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
     """Mini-batch Equilibrium K-Means.
 
-    Scalable mini-batch optimisation of the EKM objective supporting both an
-    accumulation scheme (``learning_rate=None``) and an online update scheme.
+    Scalable mini-batch optimisation of the equilibrium k-means objective
+    supporting both an accumulation scheme (``learning_rate=None``) and
+    an online exponential moving average update scheme.
 
     Parameters
     ----------
     n_clusters : int, default=8
-        Number of clusters.
+        The number of clusters to form / centers to learn.
     metric : {'euclidean', 'manhattan'}, default='euclidean'
-        Distance metric.
+        Distance metric used for batch distance computations. Manhattan
+        can be more robust to certain outliers but is slower than
+        vectorised Euclidean.
     alpha : float or {'dvariance'}, default=0.5
-        Equilibrium weighting parameter or heuristic specifier.
+        Equilibrium weighting parameter controlling sharpness of the
+        soft membership distribution prior to equilibrium correction. If
+        ``'dvariance'`` a heuristic value is derived from a subsample of
+        the data (see ``init_size``) using ``scale / mean(d^2)`` where
+        ``d^2`` are squared distances to the subsample mean.
     scale : float, default=2.0
-        Scaling applied when ``alpha='dvariance'``.
+        Multiplicative factor in the ``'dvariance'`` heuristic. Larger
+        values produce larger effective ``alpha`` leading to crisper
+        initial memberships.
     batch_size : int, default=256
-        Size of the mini-batches.
+        Number of samples per mini-batch. A larger batch size reduces
+        variance of updates but increases per-step cost and memory.
     max_epochs : int, default=10
-        Maximum number of epochs over the data.
-    init : {'k-means++', 'random'} or ndarray, default='k-means++'
-        Initialisation strategy.
+        Maximum number of full passes (epochs) over the training data.
+    init : {'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
+        Initialization method.
+        * 'k-means++' : probabilistic seeding adapted for chosen metric.
+        * 'random' : choose ``n_clusters`` observations without replacement.
+        * ndarray : user-specified initial centers.
     init_size : int or None, default=None
-        Subset size used for alpha heuristic when ``alpha='dvariance'``.
+        Subsample size used to estimate the ``'dvariance'`` heuristic. If
+        ``None`` a size based on ``max(10 * n_clusters, batch_size)`` is
+        used (capped at ``n_samples``). Ignored when ``alpha`` is a
+        numeric value.
     shuffle : bool, default=True
-        Whether to shuffle the data at each epoch.
+        Whether to shuffle sample order at the beginning of each epoch.
+        Recommended for i.i.d. data to decorrelate batches.
     learning_rate : float or None, default=None
-        If set, use online updates with this learning rate; otherwise use
-        a cumulative average (batch accumulation) update.
+        If ``None`` use accumulation mode (centers are the weighted
+        average of all processed batches). If a positive float, perform
+        online exponential moving average updates::
+
+            C_k <- (1 - lr) * C_k + lr * xbar_k
+
+        where ``xbar_k`` is the weighted mean of cluster ``k`` in the
+        current batch.
     tol : float, default=1e-4
-        Tolerance on center change signalling convergence.
+        Convergence tolerance on Frobenius norm of center change scaled
+        by average feature variance of the dataset (computed once).
     reassignment_ratio : float, default=0.0
-        Minimum fraction of batch weight required for a cluster update.
+        Minimum fraction of batch weight a cluster must receive to be
+        updated. Clusters not meeting the threshold accumulate a
+        patience counter (see ``reassign_patience``).
     reassign_patience : int, default=3
-        Number of consecutive skips before reassigning a cluster center.
+        Number of consecutive batches a cluster can fail the
+        ``reassignment_ratio`` threshold before it is forcibly
+        reassigned to a far point in the current batch.
     verbose : int, default=0
-        Verbosity level.
+        Verbosity level. ``0`` is silent; higher values print epoch
+        diagnostics every ``print_every`` epochs.
     monitor_size : int or None, default=1024
-        Subset size for approximate objective monitoring.
+        Size of a subsample used to compute an approximate objective for
+        monitoring (stored in ``objective_approx_``). If ``None`` the
+        full dataset is used (higher cost).
     print_every : int, default=1
-        Epoch frequency of progress printing.
+        Frequency (in epochs) at which progress messages are printed
+        when ``verbose > 0``.
     use_numba : bool, default=False
-        Use numba acceleration if available.
+        If ``True`` and :mod:`numba` is installed use a JIT-compiled
+        kernel for the equilibrium weight computation.
     numba_threads : int or None, default=None
-        Threads for numba parallel sections.
+        Number of threads to request from numba's threading layer (if
+        available). Ignored when numba is not installed or
+        ``use_numba=False``.
     random_state : int, RandomState instance or None, default=None
-        Random seed.
+        Controls reproducibility of center initialisation, alpha
+        heuristic subsampling and shuffling. Pass an int for
+        deterministic behaviour.
 
     Attributes
     ----------
     cluster_centers_ : ndarray of shape (n_clusters, n_features)
         Final centers.
+    labels_ : ndarray of shape (n_samples,)
+        Hard assignment labels for the training data (available only after
+        calling :meth:`fit`). Not updated by :meth:`partial_fit`.
     alpha_ : float
         Resolved alpha value.
     objective_approx_ : list of float
@@ -609,6 +712,10 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         Accumulated weighted sums (accumulation mode).
     W_, U_ : ndarrays
         Final weights and memberships for the full training data (if `fit`).
+    n_features_in_ : int
+        Number of features seen during the first call to :meth:`fit` or
+        :meth:`partial_fit`. Ensures consistent dimensionality across
+        incremental updates and predictions.
 
     Methods
     -------
@@ -628,13 +735,14 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         Fit the model and return the membership matrix for the training data.
 
     (Internal helpers: `_init_centers`, `_resolve_alpha`, `_calc_weight`, `_approx_objective` are internal implementation details.)
-    Note
+    Notes
     -----
-
-    
+    The approximate objective is tracked on a monitoring subset when
+    ``monitor_size`` is not ``None`` and stored in
+    ``objective_approx_``.
     Examples
     --------
-    >>> from sklearn.cluster import MiniBatchEKMeans
+    >>> from sklekmeans import MiniBatchEKMeans
     >>> import numpy as np
     >>> X = np.array([[1, 2], [1, 4], [1, 0],
     ...               [4, 2], [4, 0], [4, 4],
@@ -735,9 +843,7 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
             return np.asarray(self.init, dtype=float).copy()
         if self.init == "k-means++":
             if self.metric == "euclidean":
-                from ._kmeans import kmeans_plusplus as _kpp
-
-                centers, _ = _kpp(
+                centers, _ = kmeans_plusplus(
                     X, self.n_clusters, random_state=rng, sample_weight=None
                 )
                 centers = centers.astype(float, copy=False)
@@ -794,6 +900,7 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         return float(np.sum(U * D2))
 
     # ---------------- public API ----------------
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None):
         """Train the mini-batch equilibrium k-means estimator.
 
@@ -809,7 +916,15 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         self : object
             Fitted estimator.
         """
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=True,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         rng = check_random_state(self.random_state)
         n_samples, n_features = X.shape
         K = self.n_clusters
@@ -892,11 +1007,11 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
                 print(
                     f"[MiniBatchEKM] epoch {epoch}/{self.max_epochs}  center shift / var(X) = {center_shift_tot / Var_X:<.3e}  objective≈{obj_approx:<.3e}"
                 )
-            if self.tol>0.0 and center_shift_tot <= Var_X * self.tol:
+            if self.tol > 0.0 and center_shift_tot <= Var_X * self.tol:
                 if self.verbose:
                     print(
                         f"[MiniBatchEKM] Converged at epoch {epoch} (center shift / var(X) "
-                            f"{center_shift_tot / Var_X:<.3e} <= tol {self.tol:<.3e})."
+                        f"{center_shift_tot / Var_X:<.3e} <= tol {self.tol:<.3e})."
                     )
                 break
 
@@ -912,6 +1027,8 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         self.W_ = self._calc_weight(D2_shift, alpha)
         E = np.exp(-alpha * D2_shift)
         self.U_ = E / np.sum(E, axis=1, keepdims=True)
+        # Hard labels for training data (not maintained incrementally during partial_fit)
+        self.labels_ = np.argmin(D, axis=1)
         return self
 
     def partial_fit(self, X_batch, y=None):
@@ -929,7 +1046,27 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
         self : object
             Updated estimator.
         """
-        Xb = check_array(X_batch, dtype=[np.float64, np.float32])
+        # feature count consistency is enforced on subsequent calls.
+        if not hasattr(self, "cluster_centers_") and not hasattr(self, "n_features_in_"):
+            Xb = validate_data(
+                self,
+                X_batch,
+                accept_sparse=False,
+                reset=True,
+                dtype=[np.float64, np.float32],
+                order="C",
+                accept_large_sparse=False,
+            )
+        else:
+            Xb = validate_data(
+                self,
+                X_batch,
+                accept_sparse=False,
+                reset=False,
+                dtype=[np.float64, np.float32],
+                order="C",
+                accept_large_sparse=False,
+            )
         rng = check_random_state(self.random_state)
         if not hasattr(self, "cluster_centers_"):
             self.cluster_centers_ = self._init_centers(Xb, rng)
@@ -994,7 +1131,15 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
     def predict(self, X):
         """Assign each sample in ``X`` to the closest learned center."""
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         D = _pairwise_distance(X, self.cluster_centers_, self.metric)
         labels = np.argmin(D, axis=1)
         distinct_clusters = len(set(labels))
@@ -1011,13 +1156,29 @@ class MiniBatchEKMeans(BaseEstimator, ClusterMixin):
     def transform(self, X):
         """Compute distances from samples to cluster centers."""
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         return _pairwise_distance(X, self.cluster_centers_, self.metric)
 
     def membership(self, X):
         """Compute soft membership matrix for samples in ``X``."""
         check_is_fitted(self, "cluster_centers_")
-        X = check_array(X, dtype=[np.float64, np.float32])
+        X = validate_data(
+            self,
+            X,
+            accept_sparse=False,
+            reset=False,
+            dtype=[np.float64, np.float32],
+            order="C",
+            accept_large_sparse=False,
+        )
         alpha = self.alpha_
         D2 = self.transform(X) ** 2
         D2_shift = D2 - D2.min(axis=1, keepdims=True)

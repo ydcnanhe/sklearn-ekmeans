@@ -1,3 +1,19 @@
+"""Compare full-batch EKMeans with two MiniBatchEKMeans update modes.
+
+This benchmark contrasts:
+
+* Full batch EKMeans.
+* Mini-batch accumulation (cumulative weight updates).
+* Mini-batch online (fixed learning rate EMA updates).
+
+Metrics reported: ARI, NMI, objective (EKM internal), elapsed time,
+cluster size distribution and alpha used.
+
+Run:
+
+    python benchmark/benchmark_minibatch_compare.py
+"""
+
 import time
 import numpy as np
 from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
@@ -33,16 +49,18 @@ def make_imbalanced(seed=0):
     return X, y
 
 def stable_objective(X, centers, alpha, metric):
-    # compute objective consistent with equilibrium weighting definition
-    from ekm_sklearn import _pairwise_distance  # reuse implementation
+    """Compute internal equilibrium objective for diagnostic comparison.
+
+    Mirrors the formulation used inside the estimator (without full
+    equilibrium weight correction) for quick benchmarking purposes.
+    """
+    from sklekmeans._ekmeans import _pairwise_distance  # local reuse
     D2 = _pairwise_distance(X, centers, metric) ** 2
-    # row-wise shift for stability
     D2_shift = D2 - D2.min(axis=1, keepdims=True)
     E = np.exp(-alpha * D2_shift)
     denom = np.sum(E, axis=1) + np.finfo(float).eps
     num = np.sum(D2 * E, axis=1)
-    J = num / denom
-    return float(np.sum(J))
+    return float(np.sum(num / denom))
 
 
 def run_and_report(name, fit_callable, X, y):
@@ -72,14 +90,14 @@ def main():
 
     # Full batch EKM
     def full_batch():
-        m = EKM(n_clusters=n_clusters, alpha='dvariance', scale=2.0, max_iter=300, tol=1e-3, n_init=1, init='plus', random_state=42, use_numba=False)
+        m = EKM(n_clusters=n_clusters, alpha='dvariance', scale=2.0, max_iter=300, tol=1e-3, n_init=1, init='k-means++', random_state=42, use_numba=False)
         m.fit(X)
         return m
 
     # MiniBatch accumulation
     def minibatch_acc():
         m = MiniBatchEKM(n_clusters=n_clusters, alpha='dvariance', scale=2.0,
-                         batch_size=256, max_epochs=30, init='plus', init_size=500,
+                         batch_size=256, max_epochs=30, init='k-means++', init_size=500,
                          shuffle=True, learning_rate=None, tol=1e-3,
                          reassignment_ratio=0.0, reassign_patience=3, verbose=0,
                          monitor_size=512, print_every=5,
@@ -90,7 +108,7 @@ def main():
     # MiniBatch online (fixed learning rate)
     def minibatch_online():
         m = MiniBatchEKM(n_clusters=n_clusters, alpha='dvariance', scale=2.0,
-                         batch_size=256, max_epochs=30, init='plus', init_size=500,
+                         batch_size=256, max_epochs=30, init='k-means++', init_size=500,
                          shuffle=True, learning_rate=0.2, tol=1e-3,
                          reassignment_ratio=0.01, reassign_patience=3,verbose=0,
                          monitor_size=512, print_every=5,
@@ -139,6 +157,7 @@ def main():
             ax.set_title(title)
         plt.tight_layout()
         plt.show()
-
+    else:
+        print('[Info] matplotlib not installed; only text output without plots will be shown.')
 if __name__ == '__main__':
     main()

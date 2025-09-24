@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+sklekmeans/__init__.py
+sklekmeans/_ekmeans.py
+sklekmeans.egg-info/PKG-INFO
+sklekmeans.egg-info/SOURCES.txt
+sklekmeans.egg-info/dependency_links.txt
+sklekmeans.egg-info/requires.txt
+sklekmeans.egg-info/top_level.txt
+test/test_ekmeans.py

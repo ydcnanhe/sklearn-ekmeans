@@ -1,0 +1,4 @@
+# Base runtime dependencies for sklekmeans (mirrors pyproject [project.dependencies])
+# Python version requirement: >=3.9 (declared in pyproject.toml, repeated here for clarity)
+numpy>=1.23
+scikit-learn>=1.4

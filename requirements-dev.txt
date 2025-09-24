@@ -1,0 +1,14 @@
+# Development + docs + speed (aggregated) dependencies
+# Python version requirement: >=3.9 (see pyproject.toml)
+-r requirements.txt
+pytest>=7
+pytest-cov
+ruff>=0.5
+black>=24.0
+sphinx>=7
+pydata-sphinx-theme
+sphinx-gallery
+sphinx-design
+numpydoc
+matplotlib
+numba>=0.59

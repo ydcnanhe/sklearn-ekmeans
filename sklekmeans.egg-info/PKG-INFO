@@ -1,3 +1,45 @@
+Metadata-Version: 2.4
+Name: sklekmeans
+Version: 0.1.0
+Summary: Equilibrium K-Means (EKMeans) clustering algorithms compatible with scikit-learn
+Author-email: Yudong He <yhebh@connect.ust.hk>
+License: BSD-3-Clause
+Project-URL: Homepage, https://github.com/ydcnanhe/sklearn-ekmeans
+Project-URL: Documentation, https://ydcnanhe.github.io/sklearn-ekmeans
+Project-URL: Source, https://github.com/ydcnanhe/sklearn-ekmeans/sklekmeans/
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Intended Audience :: Science/Research
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.23
+Requires-Dist: scikit-learn>=1.4
+Provides-Extra: dev
+Requires-Dist: pytest>=7; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: ruff>=0.5; extra == "dev"
+Requires-Dist: black>=24.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7; extra == "docs"
+Requires-Dist: pydata-sphinx-theme; extra == "docs"
+Requires-Dist: sphinx-gallery; extra == "docs"
+Requires-Dist: sphinx-design; extra == "docs"
+Requires-Dist: numpydoc; extra == "docs"
+Requires-Dist: matplotlib; extra == "docs"
+Provides-Extra: speed
+Requires-Dist: numba>=0.59; extra == "speed"
+Provides-Extra: all
+Requires-Dist: sklekmeans[dev,docs,speed]; extra == "all"
+Dynamic: license-file
+
 sklekmeans - Equilibrium K-Means for scikit-learn
 =================================================
 

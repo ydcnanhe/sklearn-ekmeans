@@ -1,37 +1,51 @@
+"""Monte Carlo benchmark: KMeans vs EKMeans on an imbalanced 3-cluster dataset.
+
+This script repeatedly generates an imbalanced Gaussian mixture and compares
+Adjusted Rand Index and Silhouette scores for scikit-learn KMeans and
+Equilibrium K-Means (EKMeans). It also produces boxplots and a final
+visualisation of true vs predicted labels for the last run.
+
+Run:
+
+    python benchmark/benchmark.py
+
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
-from sklekmeans import EKMeans as EKM  # 之前封装好的类
-# ------------------
-# Benchmark 参数
-# ------------------
-N_REPEATS = 30   # Monte Carlo 实验次数
-N_SAMPLES = [2000, 50, 30]  # 不平衡簇样本数
+from sklekmeans import EKMeans as EKM
+
+N_REPEATS = 30  # Monte Carlo repetitions
+N_SAMPLES = [2000, 50, 30]  # Strong imbalance
 CENTERS = [(-5, -2), (0, 0), (5, 5)]
 STD = [1.0, 1.0, 1.0]
 N_CLUSTERS = 3
-# 保存结果
 ari_results = {"KMeans": [], "EKM": []}
 sil_results = {"KMeans": [], "EKM": []}
 # ------------------
 # Monte Carlo 实验
 # ------------------
 for seed in range(N_REPEATS):
-    # 1. 生成数据
     X, y_true = make_blobs(
-        n_samples=N_SAMPLES, centers=CENTERS, 
-        cluster_std=STD, random_state=seed
+        n_samples=N_SAMPLES,
+        centers=CENTERS,
+        cluster_std=STD,
+        random_state=seed,
     )
-    # 2. KMeans
     km = KMeans(n_clusters=N_CLUSTERS, n_init=30, random_state=seed)
     labels_km = km.fit_predict(X)
     ari_results["KMeans"].append(adjusted_rand_score(y_true, labels_km))
     sil_results["KMeans"].append(silhouette_score(X, labels_km))
-    # 3. EKM
-    ekm = EKM(n_clusters=N_CLUSTERS, metric='euclidean',
-              alpha='dvariance', n_init=30, random_state=seed)
+    ekm = EKM(
+        n_clusters=N_CLUSTERS,
+        metric="euclidean",
+        alpha="dvariance",
+        n_init=30,
+        random_state=seed,
+    )
     labels_ekm = ekm.fit_predict(X)
     ari_results["EKM"].append(adjusted_rand_score(y_true, labels_ekm))
     sil_results["EKM"].append(silhouette_score(X, labels_ekm))
@@ -69,9 +83,7 @@ plt.suptitle("Monte Carlo Benchmark ({} runs)".format(N_REPEATS), fontsize=14)
 plt.show()
 
 # ------------------
-# 聚类结果可视化（使用最后一次实验的数据）
-# ------------------
-# 在上面的循环结束后，变量 X, y_true, labels_km, labels_ekm, km, ekm 保存的是最后一个 seed 的结果
+# Cluster result visualization (last run data retained in loop scope)
 fig2, axes2 = plt.subplots(1, 3, figsize=(15, 4))
 axes2[0].scatter(X[:, 0], X[:, 1], c=y_true, s=10, cmap='tab10', alpha=0.75)
 axes2[0].set_title('True Labels')

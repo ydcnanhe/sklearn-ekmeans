@@ -295,7 +295,7 @@ def parse_args():
     ap.add_argument('--plot', action='store_true', help='Generate boxplots if matplotlib available')
     ap.add_argument('--save-plot', type=str, default='', help='Save boxplot figure to file')
     # cluster projection plotting
-    ap.add_argument('--plot-clusters', action='store_true', help='Plot 2D projection (PCA) for one run (first seed) with true labels, KMeans, EKM')
+    ap.add_argument('--plot-clusters', type=bool, default=True, help='Plot 2D projection (PCA) for one run (first seed) with true labels, KMeans, EKM')
     ap.add_argument('--cluster-plot-method', type=str, default='pca', choices=['pca'], help='Projection method')
     ap.add_argument('--cluster-plot-subsample', type=int, default=6000, help='Subsample points for cluster plot (0 = no subsample)')
     ap.add_argument('--cluster-plot-seed', type=int, default=123, help='Random seed for subsampling / projection reproducibility')

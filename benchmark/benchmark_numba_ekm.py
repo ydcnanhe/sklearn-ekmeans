@@ -1,3 +1,15 @@
+"""Numba acceleration benchmark for EKMeans.
+
+Measures wall-clock speed of EKMeans with and without ``use_numba`` over
+several repeats on a synthetic (optionally imbalanced) dataset. If
+``numba`` is not installed the script still runs the pure NumPy path and
+prints an informational message.
+
+Run:
+
+    python benchmark/benchmark_numba_ekm.py
+"""
+
 import time
 import statistics
 import numpy as np
@@ -51,9 +63,15 @@ def make_data(n_samples=12000, n_features=16, n_clusters=5, imbalance=True, seed
 
 
 def clone_initial_centers(X, n_clusters, random_state):
-    # Use k-means++ style init once, then reuse for fairness
-    from sklekmeans import _kmeans_plus_init
-    return _kmeans_plus_init(X, n_clusters, metric='euclidean')
+    """Generate deterministic initial centers using first-pass EKMeans++.
+
+    Uses one EKMeans run (single iteration tolerance) to obtain
+    reproducible centers for both numba and non-numba timing runs.
+    """
+    model = EKM(n_clusters=n_clusters, alpha=0.5, max_iter=1, tol=0, n_init=1,
+                init='k-means++', random_state=random_state, use_numba=False)
+    model.fit(X)
+    return model.cluster_centers_.copy()
 
 
 def time_run(X, init_centers, use_numba, repeats=3, max_iter=200, tol=1e-3):

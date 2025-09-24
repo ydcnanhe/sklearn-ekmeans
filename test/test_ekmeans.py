@@ -38,6 +38,9 @@ def test_minibatchekm_basic():
     U = mb.membership(X)
     assert U.shape == (X.shape[0], 2)
     assert np.allclose(U.sum(axis=1), 1.0, atol=1e-6)
+    # labels_ attribute should be present after full fit
+    assert hasattr(mb, 'labels_')
+    assert mb.labels_.shape == (X.shape[0],)
 
 
 def test_alpha_dvariance():
@@ -60,3 +63,13 @@ def test_minibatch_partial_fit():
         mb.partial_fit(X[i:i+10])
     labels = mb.predict(X)
     assert labels.shape[0] == X.shape[0]
+    # labels_ not maintained incrementally during partial_fit-only usage
+    assert not hasattr(mb, 'labels_')
+
+if __name__ == '__main__':
+    test_ekm_estimator_checks()
+    test_ekm_basic_fit_predict()
+    test_minibatchekm_basic()
+    test_alpha_dvariance()
+    test_invalid_metric()
+    test_minibatch_partial_fit()
