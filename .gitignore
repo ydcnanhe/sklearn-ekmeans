@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.eggs/
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Jupyter/VSCode
+.ipynb_checkpoints/
+.vscode/
+
+# Build artifacts
+build/
+dist/
+
+# Sphinx docs build
+/doc/_build/
+/doc/generated/
+/doc/auto_examples/
+/doc/sg_execution_times.rst
+/doc_build/
+
+# OS files
+.DS_Store
+Thumbs.db
