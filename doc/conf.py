@@ -115,10 +115,12 @@ intersphinx_mapping = {
 plot_gallery = "True"
 
 sphinx_gallery_conf = {
-    "doc_module": "sklekmeans",
+    # Disable code link embedding by leaving doc_module empty
+    "doc_module": (),
     "backreferences_dir": os.path.join("generated"),
     "examples_dirs": ["../examples"],  # can be a list
     "gallery_dirs": ["auto_examples"],
-    "reference_url": {"sklekmeans": None},
+    # No external reference URLs for code linking
+    "reference_url": {},
     "remove_config_comments": True,
 }

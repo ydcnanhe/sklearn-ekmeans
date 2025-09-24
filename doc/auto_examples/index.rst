@@ -39,7 +39,7 @@ The gallery will appear under ``doc/_build/html/auto_examples``.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Run with::">
+    <div class="sphx-glr-thumbcontainer" tooltip="This minimal example demonstrates fitting and using EKMeans and MiniBatchEKMeans on random data.">
 
 .. only:: html
 
@@ -50,7 +50,7 @@ The gallery will appear under ``doc/_build/html/auto_examples``.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Basic usage examples for EKMeans and MiniBatchEKMeans.</div>
+      <div class="sphx-glr-thumbnail-title">Basic usage of EKMeans and MiniBatchEKMeans</div>
     </div>
 
 

@@ -40,7 +40,6 @@ This is the documentation for `sklekmeans` to help at extending
     :class-container: sd-text-center
 
     .. grid-item-card:: Getting started
-        :img-top: _static/img/index_getting_started.svg
         :class-card: intro-card
         :shadow: md
 
@@ -57,7 +56,6 @@ This is the documentation for `sklekmeans` to help at extending
             To the getting started guideline
 
     .. grid-item-card::  User guide
-        :img-top: _static/img/index_user_guide.svg
         :class-card: intro-card
         :shadow: md
 
@@ -75,7 +73,6 @@ This is the documentation for `sklekmeans` to help at extending
             To the user guide
 
     .. grid-item-card::  API reference
-        :img-top: _static/img/index_api.svg
         :class-card: intro-card
         :shadow: md
 
@@ -93,7 +90,6 @@ This is the documentation for `sklekmeans` to help at extending
             To the reference guide
 
     .. grid-item-card::  Examples
-        :img-top: _static/img/index_examples.svg
         :class-card: intro-card
         :shadow: md
 

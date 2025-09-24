@@ -447,25 +447,25 @@ variance is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_clusters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=8</em>) – The number of clusters to form as well as the number of centroids
+<li><p><strong>n_clusters</strong> (<em>int</em><em>, </em><em>default=8</em>) – The number of clusters to form as well as the number of centroids
 to generate.</p></li>
 <li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'manhattan'}</em><em>, </em><em>default='euclidean'</em>) – Distance metric used both to assign points to clusters and to
 update centers. Manhattan distance can be more robust to outliers
 in some settings but increases cost relative to vectorised
 squared Euclidean computations.</p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>{'dvariance'}</em><em>, </em><em>default=0.5</em>) – Equilibrium weighting parameter. If set to
+<li><p><strong>alpha</strong> (<em>float</em><em> or </em><em>{'dvariance'}</em><em>, </em><em>default=0.5</em>) – Equilibrium weighting parameter. If set to
 the string <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> a heuristic value <code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">/</span> <span class="pre">mean(d^2)</span></code>
 is computed where <code class="docutils literal notranslate"><span class="pre">d^2</span></code> are squared distances to the global
 mean.</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=2.0</em>) – Multiplicative factor applied in the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic.
+<li><p><strong>scale</strong> (<em>float</em><em>, </em><em>default=2.0</em>) – Multiplicative factor applied in the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic.
 Higher values yield larger effective <code class="docutils literal notranslate"><span class="pre">alpha</span></code> resulting in
 crisper assignments.</p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=300</em>) – Maximum number of EM-like update iterations for a single
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>default=300</em>) – Maximum number of EM-like update iterations for a single
 initialisation.</p></li>
-<li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=1e-4</em>) – Relative tolerance (scaled by average feature variance of the
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>default=1e-4</em>) – Relative tolerance (scaled by average feature variance of the
 data) on the Frobenius norm of the change in <code class="docutils literal notranslate"><span class="pre">cluster_centers_</span></code>
 to declare convergence.</p></li>
-<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=1</em>) – Number of random initialisations to perform. The run with the
+<li><p><strong>n_init</strong> (<em>int</em><em>, </em><em>default=1</em>) – Number of random initialisations to perform. The run with the
 lowest internal equilibrium objective is retained. Increasing
 <code class="docutils literal notranslate"><span class="pre">n_init</span></code> improves robustness to local minima at additional
 computational cost.</p></li>
@@ -479,15 +479,15 @@ computational cost.</p></li>
 <li><p>ndarray : user provided initial centers.</p></li>
 </ul>
 </p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Controls the randomness of initial center selection and the
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Controls the randomness of initial center selection and the
 heuristic alpha sampling (when applicable). Pass an int for
 reproducible results.</p></li>
-<li><p><strong>use_numba</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default=False</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">numba</span></code> is installed (see <code class="docutils literal notranslate"><span class="pre">[speed]</span></code> extra),
+<li><p><strong>use_numba</strong> (<em>bool</em><em>, </em><em>default=False</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">numba</span></code> is installed (see <code class="docutils literal notranslate"><span class="pre">[speed]</span></code> extra),
 use a JIT-compiled kernel for weight computation.</p></li>
-<li><p><strong>numba_threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>default=None</em>) – If provided sets the number of threads used by numba parallel
+<li><p><strong>numba_threads</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – If provided sets the number of threads used by numba parallel
 sections. Ignored if numba is unavailable or <code class="docutils literal notranslate"><span class="pre">use_numba</span></code> is
 <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=0</em>) – Verbosity level. <code class="docutils literal notranslate"><span class="pre">0</span></code> is silent; higher values print progress
+<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>default=0</em>) – Verbosity level. <code class="docutils literal notranslate"><span class="pre">0</span></code> is silent; higher values print progress
 each iteration.</p></li>
 </ul>
 </dd>
@@ -520,7 +520,7 @@ each iteration.</p></li>
 <dd><p>Number of iterations run for the best initialisation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -531,7 +531,7 @@ each iteration.</p></li>
 <dd><p>Objective value of the best run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -542,7 +542,7 @@ each iteration.</p></li>
 <dd><p>Resolved alpha value actually used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -577,7 +577,7 @@ Each row sums to 1.</p>
 <a class="reference internal" href="#id0" title="sklekmeans.EKMeans.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> and used for input validation in subsequent operations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -706,7 +706,7 @@ recommended.</p>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)">object</a></p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -736,7 +736,7 @@ and returns a transformed version of <code class="docutils literal notranslate">
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Input samples.</p></li>
 <li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_outputs</em><em>)</em><em>,                 </em><em>default=None</em>) – Target values (None for unsupervised transformations).</p></li>
-<li><p><strong>**fit_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional fit parameters.</p></li>
+<li><p><strong>**fit_params</strong> (<em>dict</em>) – Additional fit parameters.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -752,11 +752,11 @@ and returns a transformed version of <code class="docutils literal notranslate">
 <dt class="sig sig-object py" id="sklekmeans.EKMeans.get_metadata_routing">
 <span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.EKMeans.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.7)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <span class="xref std std-ref">User Guide</span> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>routing</strong> – A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dd class="field-odd"><p><strong>routing</strong> – A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
 routing information.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -771,14 +771,14 @@ routing information.</p>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>deep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, will return the parameters for this estimator and
+<dd class="field-odd"><p><strong>deep</strong> (<em>bool</em><em>, </em><em>default=True</em>) – If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -821,7 +821,7 @@ contained subobjects that are estimators.</p>
 <dt class="sig sig-object py" id="sklekmeans.EKMeans.set_output">
 <span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.EKMeans.set_output" title="Link to this definition">#</a></dt>
 <dd><p>Set output container.</p>
-<p>See <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.7)"><span>Introducing the set_output API</span></a>
+<p>See <span class="xref std std-ref">sphx_glr_auto_examples_miscellaneous_plot_set_output.py</span>
 for an example on how to use the API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -851,12 +851,12 @@ for an example on how to use the API.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.EKMeans.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Estimator parameters.</p>
+<dd class="field-odd"><p><strong>**params</strong> (<em>dict</em>) – Estimator parameters.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Estimator instance.</p>

@@ -445,32 +445,32 @@ an online exponential moving average update scheme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_clusters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=8</em>) – The number of clusters to form / centers to learn.</p></li>
+<li><p><strong>n_clusters</strong> (<em>int</em><em>, </em><em>default=8</em>) – The number of clusters to form / centers to learn.</p></li>
 <li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'manhattan'}</em><em>, </em><em>default='euclidean'</em>) – Distance metric used for batch distance computations. Manhattan
 can be more robust to certain outliers but is slower than
 vectorised Euclidean.</p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>{'dvariance'}</em><em>, </em><em>default=0.5</em>) – Equilibrium weighting parameter controlling sharpness of the
+<li><p><strong>alpha</strong> (<em>float</em><em> or </em><em>{'dvariance'}</em><em>, </em><em>default=0.5</em>) – Equilibrium weighting parameter controlling sharpness of the
 soft membership distribution prior to equilibrium correction. If
 <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> a heuristic value is derived from a subsample of
 the data (see <code class="docutils literal notranslate"><span class="pre">init_size</span></code>) using <code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">/</span> <span class="pre">mean(d^2)</span></code> where
 <code class="docutils literal notranslate"><span class="pre">d^2</span></code> are squared distances to the subsample mean.</p></li>
-<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=2.0</em>) – Multiplicative factor in the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic. Larger
+<li><p><strong>scale</strong> (<em>float</em><em>, </em><em>default=2.0</em>) – Multiplicative factor in the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic. Larger
 values produce larger effective <code class="docutils literal notranslate"><span class="pre">alpha</span></code> leading to crisper
 initial memberships.</p></li>
-<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=256</em>) – Number of samples per mini-batch. A larger batch size reduces
+<li><p><strong>batch_size</strong> (<em>int</em><em>, </em><em>default=256</em>) – Number of samples per mini-batch. A larger batch size reduces
 variance of updates but increases per-step cost and memory.</p></li>
-<li><p><strong>max_epochs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=10</em>) – Maximum number of full passes (epochs) over the training data.</p></li>
+<li><p><strong>max_epochs</strong> (<em>int</em><em>, </em><em>default=10</em>) – Maximum number of full passes (epochs) over the training data.</p></li>
 <li><p><strong>init</strong> (<em>{'k-means++'</em><em>, </em><em>'random'}</em><em> or </em><em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_clusters</em><em>, </em><em>n_features</em><em>)</em><em>, </em><em>default='k-means++'</em>) – Initialization method.
 * ‘k-means++’ : probabilistic seeding adapted for chosen metric.
 * ‘random’ : choose <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code> observations without replacement.
 * ndarray : user-specified initial centers.</p></li>
-<li><p><strong>init_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Subsample size used to estimate the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic. If
+<li><p><strong>init_size</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Subsample size used to estimate the <code class="docutils literal notranslate"><span class="pre">'dvariance'</span></code> heuristic. If
 <code class="docutils literal notranslate"><span class="pre">None</span></code> a size based on <code class="docutils literal notranslate"><span class="pre">max(10</span> <span class="pre">*</span> <span class="pre">n_clusters,</span> <span class="pre">batch_size)</span></code> is
 used (capped at <code class="docutils literal notranslate"><span class="pre">n_samples</span></code>). Ignored when <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is a
 numeric value.</p></li>
-<li><p><strong>shuffle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default=True</em>) – Whether to shuffle sample order at the beginning of each epoch.
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Whether to shuffle sample order at the beginning of each epoch.
 Recommended for i.i.d. data to decorrelate batches.</p></li>
-<li><p><strong>learning_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><em>None</em><em>, </em><em>default=None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">None</span></code> use accumulation mode (centers are the weighted
+<li><p><strong>learning_rate</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">None</span></code> use accumulation mode (centers are the weighted
 average of all processed batches). If a positive float, perform
 online exponential moving average updates:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C_k</span> <span class="o">&lt;-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">lr</span><span class="p">)</span> <span class="o">*</span> <span class="n">C_k</span> <span class="o">+</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">xbar_k</span>
@@ -479,27 +479,27 @@ online exponential moving average updates:</p>
 <p>where <code class="docutils literal notranslate"><span class="pre">xbar_k</span></code> is the weighted mean of cluster <code class="docutils literal notranslate"><span class="pre">k</span></code> in the
 current batch.</p>
 </p></li>
-<li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=1e-4</em>) – Convergence tolerance on Frobenius norm of center change scaled
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>default=1e-4</em>) – Convergence tolerance on Frobenius norm of center change scaled
 by average feature variance of the dataset (computed once).</p></li>
-<li><p><strong>reassignment_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=0.0</em>) – Minimum fraction of batch weight a cluster must receive to be
+<li><p><strong>reassignment_ratio</strong> (<em>float</em><em>, </em><em>default=0.0</em>) – Minimum fraction of batch weight a cluster must receive to be
 updated. Clusters not meeting the threshold accumulate a
 patience counter (see <code class="docutils literal notranslate"><span class="pre">reassign_patience</span></code>).</p></li>
-<li><p><strong>reassign_patience</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=3</em>) – Number of consecutive batches a cluster can fail the
+<li><p><strong>reassign_patience</strong> (<em>int</em><em>, </em><em>default=3</em>) – Number of consecutive batches a cluster can fail the
 <code class="docutils literal notranslate"><span class="pre">reassignment_ratio</span></code> threshold before it is forcibly
 reassigned to a far point in the current batch.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=0</em>) – Verbosity level. <code class="docutils literal notranslate"><span class="pre">0</span></code> is silent; higher values print epoch
+<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>default=0</em>) – Verbosity level. <code class="docutils literal notranslate"><span class="pre">0</span></code> is silent; higher values print epoch
 diagnostics every <code class="docutils literal notranslate"><span class="pre">print_every</span></code> epochs.</p></li>
-<li><p><strong>monitor_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>default=1024</em>) – Size of a subsample used to compute an approximate objective for
+<li><p><strong>monitor_size</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>default=1024</em>) – Size of a subsample used to compute an approximate objective for
 monitoring (stored in <code class="docutils literal notranslate"><span class="pre">objective_approx_</span></code>). If <code class="docutils literal notranslate"><span class="pre">None</span></code> the
 full dataset is used (higher cost).</p></li>
-<li><p><strong>print_every</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=1</em>) – Frequency (in epochs) at which progress messages are printed
+<li><p><strong>print_every</strong> (<em>int</em><em>, </em><em>default=1</em>) – Frequency (in epochs) at which progress messages are printed
 when <code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>.</p></li>
-<li><p><strong>use_numba</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default=False</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">numba</span></code> is installed use a JIT-compiled
+<li><p><strong>use_numba</strong> (<em>bool</em><em>, </em><em>default=False</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">numba</span></code> is installed use a JIT-compiled
 kernel for the equilibrium weight computation.</p></li>
-<li><p><strong>numba_threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Number of threads to request from numba’s threading layer (if
+<li><p><strong>numba_threads</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Number of threads to request from numba’s threading layer (if
 available). Ignored when numba is not installed or
 <code class="docutils literal notranslate"><span class="pre">use_numba=False</span></code>.</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Controls reproducibility of center initialisation, alpha
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Controls reproducibility of center initialisation, alpha
 heuristic subsampling and shuffling. Pass an int for
 deterministic behaviour.</p></li>
 </ul>
@@ -534,7 +534,7 @@ calling <a class="reference internal" href="#id0" title="sklekmeans.MiniBatchEKM
 <dd><p>Resolved alpha value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,7 +545,7 @@ calling <a class="reference internal" href="#id0" title="sklekmeans.MiniBatchEKM
 <dd><p>Epoch-wise approximate objectives.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p>list of float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -591,7 +591,7 @@ calling <a class="reference internal" href="#id0" title="sklekmeans.MiniBatchEKM
 incremental updates and predictions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -745,7 +745,7 @@ incremental updates and predictions.</p>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)">object</a></p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -773,7 +773,7 @@ and returns a transformed version of <code class="docutils literal notranslate">
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Input samples.</p></li>
 <li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_outputs</em><em>)</em><em>,                 </em><em>default=None</em>) – Target values (None for unsupervised transformations).</p></li>
-<li><p><strong>**fit_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional fit parameters.</p></li>
+<li><p><strong>**fit_params</strong> (<em>dict</em>) – Additional fit parameters.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -789,11 +789,11 @@ and returns a transformed version of <code class="docutils literal notranslate">
 <dt class="sig sig-object py" id="sklekmeans.MiniBatchEKMeans.get_metadata_routing">
 <span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.MiniBatchEKMeans.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.7)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <span class="xref std std-ref">User Guide</span> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>routing</strong> – A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dd class="field-odd"><p><strong>routing</strong> – A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
 routing information.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -808,14 +808,14 @@ routing information.</p>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>deep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, will return the parameters for this estimator and
+<dd class="field-odd"><p><strong>deep</strong> (<em>bool</em><em>, </em><em>default=True</em>) – If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>params</strong> – Parameter names mapped to their values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -841,7 +841,7 @@ contained subobjects that are estimators.</p>
 <dd class="field-even"><p><strong>self</strong> – Updated estimator.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)">object</a></p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -856,7 +856,7 @@ contained subobjects that are estimators.</p>
 <dt class="sig sig-object py" id="sklekmeans.MiniBatchEKMeans.set_output">
 <span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.MiniBatchEKMeans.set_output" title="Link to this definition">#</a></dt>
 <dd><p>Set output container.</p>
-<p>See <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.7)"><span>Introducing the set_output API</span></a>
+<p>See <span class="xref std std-ref">sphx_glr_auto_examples_miscellaneous_plot_set_output.py</span>
 for an example on how to use the API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -886,12 +886,12 @@ for an example on how to use the API.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sklekmeans.MiniBatchEKMeans.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Estimator parameters.</p>
+<dd class="field-odd"><p><strong>**params</strong> (<em>dict</em>) – Estimator parameters.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Estimator instance.</p>
@@ -904,12 +904,12 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sklekmeans.MiniBatchEKMeans.set_partial_fit_request">
-<span class="sig-name descname"><span class="pre">set_partial_fit_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'$UNCHANGED$'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sklekmeans.MiniBatchEKMeans" title="sklekmeans._ekmeans.MiniBatchEKMeans"><span class="pre">MiniBatchEKMeans</span></a></span></span><a class="headerlink" href="#sklekmeans.MiniBatchEKMeans.set_partial_fit_request" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_partial_fit_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'$UNCHANGED$'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sklekmeans.MiniBatchEKMeans" title="sklekmeans._ekmeans.MiniBatchEKMeans"><span class="pre">MiniBatchEKMeans</span></a></span></span><a class="headerlink" href="#sklekmeans.MiniBatchEKMeans.set_partial_fit_request" title="Link to this definition">#</a></dt>
 <dd><p>Configure whether metadata should be requested to be passed to the <code class="docutils literal notranslate"><span class="pre">partial_fit</span></code> method.</p>
 <p>Note that this method is only relevant when this estimator is used as a
-sub-estimator within a <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-meta-estimator" title="(in scikit-learn v1.7)"><span class="xref std std-term">meta-estimator</span></a> and metadata routing is enabled
-with <code class="docutils literal notranslate"><span class="pre">enable_metadata_routing=True</span></code> (see <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.set_config.html#sklearn.set_config" title="(in scikit-learn v1.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.set_config()</span></code></a>).
-Please check the <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.7)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+sub-estimator within a <span class="xref std std-term">meta-estimator</span> and metadata routing is enabled
+with <code class="docutils literal notranslate"><span class="pre">enable_metadata_routing=True</span></code> (see <code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.set_config()</span></code>).
+Please check the <span class="xref std std-ref">User Guide</span> on how the routing
 mechanism works.</p>
 <p>The options for each parameter are:</p>
 <ul class="simple">
@@ -926,13 +926,13 @@ parameters and not others.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X_batch</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>True</em><em>, </em><em>False</em><em>, or </em><em>None</em><em>,                     </em><em>default=sklearn.utils.metadata_routing.UNCHANGED</em>) – Metadata routing for <code class="docutils literal notranslate"><span class="pre">X_batch</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">partial_fit</span></code>.</p>
+<dd class="field-odd"><p><strong>X_batch</strong> (<em>str</em><em>, </em><em>True</em><em>, </em><em>False</em><em>, or </em><em>None</em><em>,                     </em><em>default=sklearn.utils.metadata_routing.UNCHANGED</em>) – Metadata routing for <code class="docutils literal notranslate"><span class="pre">X_batch</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">partial_fit</span></code>.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – The updated object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)">object</a></p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>

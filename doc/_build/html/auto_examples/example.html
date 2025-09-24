@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; sklekmeans 0.1.0 documentation</title>
+    <title>Basic usage of EKMeans and MiniBatchEKMeans &#8212; sklekmeans 0.1.0 documentation</title>
   
   
   
@@ -370,7 +370,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basic usage of EKMeans and MiniBatchEKMeans</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_imbalanced_ekmeans.html">Imbalanced clustering comparison with EKMeans</a></li>
 </ul>
 </div>
@@ -415,7 +416,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples Gallery</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Basic usage of EKMeans and MiniBatchEKMeans</span></li>
   </ul>
 </nav>
 </div>
@@ -437,18 +438,21 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-example-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<p class="sphx-glr-example-title" id="sphx-glr-auto-examples-example-py">Basic usage examples for EKMeans and MiniBatchEKMeans.</p>
+<section class="sphx-glr-example-title" id="basic-usage-of-ekmeans-and-minibatchekmeans">
+<span id="sphx-glr-auto-examples-example-py"></span><h1>Basic usage of EKMeans and MiniBatchEKMeans<a class="headerlink" href="#basic-usage-of-ekmeans-and-minibatchekmeans" title="Link to this heading">#</a></h1>
+<p>This minimal example demonstrates fitting and using EKMeans and
+MiniBatchEKMeans on random data.</p>
 <p>Run with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">examples</span><span class="o">/</span><span class="n">example</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklekmeans</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a><span class="p">,</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklekmeans</span><span class="w"> </span><span class="kn">import</span> <span class="n">EKMeans</span><span class="p">,</span> <span class="n">MiniBatchEKMeans</span>
 
 <span class="c1"># Generate synthetic data</span>
-<span class="n">X</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">C_init</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">float64</span></a><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">C_init</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">C_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">EKMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">C_init</span><span class="p">)</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 20 labels:&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 5 membership rows:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">U_</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
@@ -456,14 +460,14 @@ to download the full example code.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iterations:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Objective J:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">objective_</span><span class="p">)</span>
 
-<span class="n">X_new</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">X_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted clusters for new samples:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Membership for new samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">membership</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distances for new samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== MiniBatchEKMeans demo ===&quot;</span><span class="p">)</span>
-<span class="n">X_large</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">mb_model</span> <span class="o">=</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a><span class="p">(</span>
+<span class="n">X_large</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">mb_model</span> <span class="o">=</span> <span class="n">MiniBatchEKMeans</span><span class="p">(</span>
     <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="s2">&quot;dvariance&quot;</span><span class="p">,</span>
@@ -501,6 +505,7 @@ to download the full example code.</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
                 </article>
@@ -540,18 +545,6 @@ to download the full example code.</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
 
   <div class="sidebar-secondary-item">
 

@@ -1,8 +1,13 @@
-"""Basic usage examples for EKMeans and MiniBatchEKMeans.
+"""
+Basic usage of EKMeans and MiniBatchEKMeans
+===========================================
+
+This minimal example demonstrates fitting and using EKMeans and
+MiniBatchEKMeans on random data.
 
 Run with::
 
-	python examples/example.py
+    python examples/example.py
 """
 
 import numpy as np

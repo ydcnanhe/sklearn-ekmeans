@@ -17,13 +17,18 @@
 
 .. _sphx_glr_auto_examples_example.py:
 
-Basic usage examples for EKMeans and MiniBatchEKMeans.
+
+Basic usage of EKMeans and MiniBatchEKMeans
+===========================================
+
+This minimal example demonstrates fitting and using EKMeans and
+MiniBatchEKMeans on random data.
 
 Run with::
 
-        python examples/example.py
+    python examples/example.py
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-53
+.. GENERATED FROM PYTHON SOURCE LINES 12-58
 
 .. code-block:: Python
 
