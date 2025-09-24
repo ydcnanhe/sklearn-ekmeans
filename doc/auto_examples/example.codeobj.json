@@ -1,0 +1,47 @@
+{
+ "EKMeans": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklekmeans",
+   "module_short": "sklekmeans",
+   "name": "EKMeans"
+  }
+ ],
+ "MiniBatchEKMeans": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklekmeans",
+   "module_short": "sklekmeans",
+   "name": "MiniBatchEKMeans"
+  }
+ ],
+ "np.array": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "array"
+  }
+ ],
+ "np.float64": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "float64"
+  }
+ ],
+ "np.random.rand": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "rand"
+  }
+ ]
+}

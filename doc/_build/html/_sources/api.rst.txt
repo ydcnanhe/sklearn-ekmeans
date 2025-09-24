@@ -1,0 +1,14 @@
+API Reference
+=============
+
+.. currentmodule:: sklekmeans
+
+Estimators
+----------
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    EKMeans
+    MiniBatchEKMeans

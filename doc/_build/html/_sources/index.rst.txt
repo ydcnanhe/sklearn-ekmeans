@@ -1,0 +1,17 @@
+sklekmeans Documentation
+========================
+
+Equilibrium K-Means (EKMeans) clustering algorithms compatible with scikit-learn.
+
+Useful links:
+
+- Source repository: https://github.com/ydcnanhe/sklearn-ekmeans
+- Documentation on GitHub Pages: https://ydcnanhe.github.io/sklearn-ekmeans
+
+.. toctree::
+    :maxdepth: 2
+
+    user_guide
+    benchmarks
+    api
+    auto_examples/index

@@ -1,0 +1,20 @@
+{
+ "sklekmeans.EKMeans": [
+  [
+   "example.py",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
+   "Run with::",
+   "Basic usage examples for EKMeans and MiniBatchEKMeans"
+  ]
+ ],
+ "sklekmeans.MiniBatchEKMeans": [
+  [
+   "example.py",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
+   "Run with::",
+   "Basic usage examples for EKMeans and MiniBatchEKMeans"
+  ]
+ ]
+}

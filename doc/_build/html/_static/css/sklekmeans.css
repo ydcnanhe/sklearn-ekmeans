@@ -1,0 +1,8 @@
+/* Basic placeholder stylesheet to avoid 404 during local builds */
+:root {
+  --primary: #1f77b4;
+}
+
+.bd-sidebar .navbar-brand {
+  font-weight: 600;
+}
