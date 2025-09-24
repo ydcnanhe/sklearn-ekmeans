@@ -10,11 +10,12 @@ estimators where practical, but the internal update rules differ.
 
 References
 ----------
+
 .. [1] Y. He. *An Equilibrium Approach to Clustering: Surpassing Fuzzy
-    C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems,
-    2025.
+   C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems,
+   2025.
 .. [2] Y. He. *Imbalanced Data Clustering Using Equilibrium K-Means*,
-    arXiv, 2024.
+   arXiv, 2024.
 
 Notes
 -----

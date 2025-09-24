@@ -69,7 +69,7 @@ all = ["sklekmeans[dev,docs,speed]"]
    "I",  # isort
    "W",  # warnings
 ]
- ignore = ["E203", "E266", "E501", "W503"]
+ignore = ["E203", "E266", "E501"]
 
  [tool.ruff.isort]
  known-first-party = ["sklekmeans"]
