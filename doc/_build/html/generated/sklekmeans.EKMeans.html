@@ -31,14 +31,13 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=27aebe0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=20097b6b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/overrides.css?v=4ca3bc62" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=27aebe0c" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,8 +48,6 @@
     <script src="../_static/documentation_options.js?v=01f34227"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=ba25eb79"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generated/sklekmeans.EKMeans';</script>
@@ -158,11 +155,42 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../auto_examples/index.html">
-    Examples
+  <a class="nav-link nav-internal" href="../quick_start.html">
+    Quick Start
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../auto_examples/index.html">
+    Examples Gallery
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
   </ul>
 </nav></div>
       
@@ -202,18 +230,6 @@
           
           
           <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -286,8 +302,29 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quick_start.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../auto_examples/index.html">
-    Examples
+    Examples Gallery
   </a>
 </li>
 
@@ -321,18 +358,6 @@
           
           
           <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -440,19 +465,19 @@ initialisation.</p></li>
 <li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default=1e-4</em>) – Relative tolerance (scaled by average feature variance of the
 data) on the Frobenius norm of the change in <code class="docutils literal notranslate"><span class="pre">cluster_centers_</span></code>
 to declare convergence.</p></li>
-<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=1</em>) – <p>Number of random initialisations to perform. The run with the
+<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=1</em>) – Number of random initialisations to perform. The run with the
 lowest internal equilibrium objective is retained. Increasing
 <code class="docutils literal notranslate"><span class="pre">n_init</span></code> improves robustness to local minima at additional
-computational cost.</p>
+computational cost.</p></li>
+<li><p><strong>init</strong> (<em>{'k-means++'</em><em>, </em><em>'random'}</em><em> or </em><em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_clusters</em><em>, </em><em>n_features</em><em>)</em><em>, </em><em>default='k-means++'</em>) – <p>Method for initialization.
+* ‘k-means++’ : use a probabilistic seeding adapted for the</p>
 <blockquote>
-<div><dl class="simple">
-<dt>init<span class="classifier">{‘k-means++’, ‘random’} or ndarray of shape (n_clusters, n_features), default=’k-means++’</span></dt><dd><p>Method for initialization. ‘k-means++’ uses a probabilistic seeding
-adapted for the chosen metric; ‘random’ selects <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code>
-observations at random; passing an ndarray uses user-provided initial
-centers.</p>
-</dd>
-</dl>
+<div><p>chosen metric.</p>
 </div></blockquote>
+<ul>
+<li><p>’random’ : choose <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code> observations at random.</p></li>
+<li><p>ndarray : user provided initial centers.</p></li>
+</ul>
 </p></li>
 <li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>RandomState instance</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Controls the randomness of initial center selection and the
 heuristic alpha sampling (when applicable). Pass an int for

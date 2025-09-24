@@ -1,142 +1,79 @@
 """
-Imbalanced clustering comparison on a synthetic dataset (2x4 layout)
-====================================================================
+Imbalanced clustering comparison with EKMeans
+=============================================
 
-This example reproduces the imbalanced 3-cluster Gaussian mixture used in
-``benchmark/benchmark.py`` and compares the clustering results of multiple
-algorithms in a 2x4 grid:
+This example compares clustering performance on an imbalanced dataset
+for several algorithms, including EKMeans and MiniBatchEKMeans.
 
-- Ground truth
-- scikit-learn: KMeans, MiniBatchKMeans, DBSCAN, SpectralClustering, AgglomerativeClustering
-- sklekmeans: EKMeans, MiniBatchEKMeans
+It is intended for the gallery and requires matplotlib to render plots.
 
-Each panel shows the assigned labels and, when applicable, cluster centers.
-Titles include Adjusted Rand Index (ARI) and Silhouette scores (when available).
 """
-
-# sphinx_gallery_thumbnail_number = 2
 
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
-from sklearn.cluster import (
-    KMeans as SKKMeans,
-    MiniBatchKMeans as SKMiniBatchKMeans,
-    DBSCAN,
-    SpectralClustering,
-    AgglomerativeClustering,
-)
-from sklearn.metrics import adjusted_rand_score, silhouette_score
-
+from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering, AgglomerativeClustering, DBSCAN
 from sklekmeans import EKMeans, MiniBatchEKMeans
 
-# Same dataset configuration as benchmark/benchmark.py
-N_SAMPLES = [2000, 50, 30]  # Strong imbalance
-CENTERS = [(-5, -2), (0, 0), (5, 5)]
-STD = [1.0, 1.0, 1.0]
-N_CLUSTERS = 3
-RANDOM_STATE = 0
 
-X, y_true = make_blobs(
-    n_samples=N_SAMPLES,
-    centers=CENTERS,
-    cluster_std=STD,
-    random_state=RANDOM_STATE,
-)
-
-algorithms = [
-    ("KMeans", lambda: SKKMeans(n_clusters=N_CLUSTERS, n_init=10, random_state=RANDOM_STATE)),
-    (
-        "MiniBatchKMeans",
-        lambda: SKMiniBatchKMeans(n_clusters=N_CLUSTERS, n_init=10, random_state=RANDOM_STATE),
-    ),
-    ("EKMeans", lambda: EKMeans(n_clusters=N_CLUSTERS, n_init=10, random_state=RANDOM_STATE, alpha="dvariance")),
-    (
-        "MiniBatchEKMeans",
-        lambda: MiniBatchEKMeans(n_clusters=N_CLUSTERS, n_init=10, random_state=RANDOM_STATE, batch_size=256, max_epochs=10),
-    ),
-    ("DBSCAN", lambda: DBSCAN(eps=0.7, min_samples=5)),
-    (
-        "Spectral",
-        lambda: SpectralClustering(
-            n_clusters=N_CLUSTERS,
-            assign_labels="kmeans",
-            random_state=RANDOM_STATE,
-            affinity="nearest_neighbors",
-            n_neighbors=10,
-        ),
-    ),
-    ("Agglomerative", lambda: AgglomerativeClustering(n_clusters=N_CLUSTERS, linkage="ward")),
-]
+def _make_imbalanced(n_samples=800, weights=(0.85, 0.10, 0.05), centers=3, cluster_std=(1.0, 1.0, 1.0), random_state=0):
+	X, y = make_blobs(
+		n_samples=n_samples,
+		centers=centers,
+		cluster_std=cluster_std,
+		random_state=random_state,
+	)
+	# Reweight labels to match desired imbalance by subsampling
+	rng = np.random.RandomState(random_state)
+	out_X, out_y = [], []
+	for k in range(centers):
+		idx = np.flatnonzero(y == k)
+		take = int(round(weights[k] * n_samples))
+		take = min(take, idx.size)
+		sel = rng.choice(idx, size=take, replace=False)
+		out_X.append(X[sel])
+		out_y.append(np.full(sel.size, k))
+	return np.vstack(out_X), np.concatenate(out_y)
 
 
-def safe_silhouette(X, labels):
-    # Silhouette requires at least 2 clusters and less than n_samples unique labels
-    vals = np.unique(labels)
-    if len(vals) < 2 or (len(vals) == 1 and vals[0] == -1):
-        return None
-    try:
-        return float(silhouette_score(X, labels))
-    except Exception:
-        return None
+def _plot(ax, X, labels, title):
+	ax.scatter(X[:, 0], X[:, 1], c=labels, s=10, cmap="tab10")
+	ax.set_title(title)
+	ax.set_xticks([])
+	ax.set_yticks([])
 
 
-rows, cols = 2, 4
-fig, axes = plt.subplots(rows, cols, figsize=(3.2 * cols, 2.7 * rows), constrained_layout=True)
-axes = axes.ravel()
+def main():
+	X, y = _make_imbalanced()
 
-# Panel 0: Ground truth
-axes[0].scatter(X[:, 0], X[:, 1], c=y_true, s=10, cmap="tab10", alpha=0.8)
-axes[0].set_title("Ground truth")
-axes[0].set_xticks([])
-axes[0].set_yticks([])
+	fig, axes = plt.subplots(2, 4, figsize=(12, 6), constrained_layout=True)
+	axes = axes.ravel()
+	_plot(axes[0], X, y, "Ground truth")
 
-# Remaining panels: algorithms
-for idx, (name, make_algo) in enumerate(algorithms, start=1):
-    ax = axes[idx]
-    try:
-        model = make_algo()
-        if hasattr(model, "fit_predict"):
-            labels_pred = model.fit_predict(X)
-        else:
-            model.fit(X)
-            labels_pred = getattr(model, "labels_", None)
-            if labels_pred is None and hasattr(model, "predict"):
-                labels_pred = model.predict(X)
-        ari = adjusted_rand_score(y_true, labels_pred)
-        sil = safe_silhouette(X, labels_pred)
-        title_metrics = f"ARI={ari:.3f}"
-        if sil is not None:
-            title_metrics += f", Sil={sil:.3f}"
-        title = f"{name} ({title_metrics})"
-    except Exception as e:
-        labels_pred = np.full(X.shape[0], -1)
-        title = f"{name} (error)"
-        print(f"{name} failed: {e}")
+	km = KMeans(n_clusters=3, n_init=10, random_state=0).fit(X)
+	_plot(axes[1], X, km.labels_, "KMeans")
 
-    ax.scatter(X[:, 0], X[:, 1], c=labels_pred, s=10, cmap="tab10", alpha=0.8)
+	mbk = MiniBatchKMeans(n_clusters=3, random_state=0, batch_size=256).fit(X)
+	_plot(axes[2], X, mbk.labels_, "MiniBatchKMeans")
 
-    # Plot centers for algorithms that expose them
-    centers = None
-    if hasattr(model, "cluster_centers_"):
-        centers = getattr(model, "cluster_centers_")
-    if centers is not None:
-        ax.scatter(
-            centers[:, 0],
-            centers[:, 1],
-            c="black",
-            s=120,
-            marker="X",
-            edgecolor="white",
-            linewidths=1,
-        )
+	ekm = EKMeans(n_clusters=3, random_state=0, alpha="dvariance").fit(X)
+	_plot(axes[3], X, ekm.labels_, "EKMeans")
 
-    ax.set_title(title)
-    ax.set_xticks([])
-    ax.set_yticks([])
+	mbekm = MiniBatchEKMeans(n_clusters=3, random_state=0, batch_size=256).fit(X)
+	_plot(axes[4], X, mbekm.labels_, "MiniBatchEKMeans")
 
-# If fewer than 8 panels were used (shouldn't happen), hide extras
-for j in range(1 + len(algorithms), rows * cols):
-    axes[j].axis("off")
+	db = DBSCAN(eps=1.5, min_samples=10).fit(X)
+	_plot(axes[5], X, db.labels_, "DBSCAN")
 
-plt.show()
+	sc = SpectralClustering(n_clusters=3, assign_labels="kmeans", random_state=0).fit(X)
+	_plot(axes[6], X, sc.labels_, "Spectral")
+
+	ac = AgglomerativeClustering(n_clusters=3).fit(X)
+	_plot(axes[7], X, ac.labels_, "Agglomerative")
+
+	plt.show()
+
+
+if __name__ == "__main__":
+	main()
+

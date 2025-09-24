@@ -26,7 +26,9 @@ jobs:
         pip install -e .[docs]
     - name: Build documentation
       working-directory: doc
-      run: sphinx-build -b html . _build/html
+      run: |
+        rm -rf _build || true
+        sphinx-build -E -b html . _build/html
 
     - name: Update the main gh-page website
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}

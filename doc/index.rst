@@ -49,7 +49,7 @@ This is the documentation for `sklekmeans` to help at extending
         +++
 
         .. button-ref:: quick_start
-            :ref-type: ref
+            :ref-type: doc
             :click-parent:
             :color: secondary
             :expand:
@@ -67,7 +67,7 @@ This is the documentation for `sklekmeans` to help at extending
         +++
 
         .. button-ref:: user_guide
-            :ref-type: ref
+            :ref-type: doc
             :click-parent:
             :color: secondary
             :expand:
@@ -85,7 +85,7 @@ This is the documentation for `sklekmeans` to help at extending
         +++
 
         .. button-ref:: api
-            :ref-type: ref
+            :ref-type: doc
             :click-parent:
             :color: secondary
             :expand:
@@ -102,8 +102,8 @@ This is the documentation for `sklekmeans` to help at extending
 
         +++
 
-        .. button-ref:: general_examples
-            :ref-type: ref
+        .. button-ref:: auto_examples/index
+            :ref-type: doc
             :click-parent:
             :color: secondary
             :expand:

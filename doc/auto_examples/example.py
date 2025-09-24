@@ -1,6 +1,4 @@
-"""
-Basic usage examples for EKMeans and MiniBatchEKMeans
-=====================================================
+"""Basic usage examples for EKMeans and MiniBatchEKMeans.
 
 Run with::
 

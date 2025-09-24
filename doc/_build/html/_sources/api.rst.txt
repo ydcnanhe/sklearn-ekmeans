@@ -3,8 +3,8 @@ API Reference
 
 .. currentmodule:: sklekmeans
 
-Estimators
-----------
+Clustering Estimators
+---------------------
 
 .. autosummary::
     :toctree: generated/

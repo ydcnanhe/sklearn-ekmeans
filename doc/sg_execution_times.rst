@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:03.849** total execution time for 3 files **from all galleries**:
+**00:02.543** total execution time for 2 files **from all galleries**:
 
 .. container::
 
@@ -33,11 +33,8 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_plot_imbalanced_ekmeans.py` (``..\examples\plot_imbalanced_ekmeans.py``)
-     - 00:03.849
+     - 00:02.543
      - 0.0
    * - :ref:`sphx_glr_auto_examples_example.py` (``..\examples\example.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plot_clustering_comparison.py` (``..\examples\plot_clustering_comparison.py``)
      - 00:00.000
      - 0.0

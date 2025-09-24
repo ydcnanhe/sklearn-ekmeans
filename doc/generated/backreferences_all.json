@@ -5,7 +5,14 @@
    "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
    "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
    "Run with::",
-   "Basic usage examples for EKMeans and MiniBatchEKMeans"
+   "Basic usage examples for EKMeans and MiniBatchEKMeans."
+  ],
+  [
+   "plot_imbalanced_ekmeans.py",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
+   "This example compares clustering performance on an imbalanced dataset for several algorithms, including EKMeans and MiniBatchEKMeans.",
+   "Imbalanced clustering comparison with EKMeans"
   ]
  ],
  "sklekmeans.MiniBatchEKMeans": [
@@ -14,7 +21,14 @@
    "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
    "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
    "Run with::",
-   "Basic usage examples for EKMeans and MiniBatchEKMeans"
+   "Basic usage examples for EKMeans and MiniBatchEKMeans."
+  ],
+  [
+   "plot_imbalanced_ekmeans.py",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\../examples",
+   "D:\\Desktop\\github\\sklearn-ekmeans\\doc\\auto_examples",
+   "This example compares clustering performance on an imbalanced dataset for several algorithms, including EKMeans and MiniBatchEKMeans.",
+   "Imbalanced clustering comparison with EKMeans"
   ]
  ]
 }

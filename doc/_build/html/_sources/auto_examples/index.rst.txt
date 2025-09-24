@@ -1,11 +1,33 @@
 :orphan:
 
-.. _general_examples:
+Examples Gallery
+================
 
-Examples
-========
+This gallery showcases how to use the estimators provided by ``sklekmeans``.
 
-This gallery showcases usage examples for `sklekmeans`.
+Contents
+--------
+
+- ``example.py``: Minimal example demonstrating a basic ``EKMeans`` fit.
+- ``plot_imbalanced_ekmeans.py``: Comparison of clustering on an imbalanced dataset.
+
+How to run locally
+------------------
+
+You can execute the examples directly, or build the documentation to render the
+plots and notebooks via Sphinx-Gallery.
+
+To build the documentation gallery locally:
+
+1. Install the docs dependencies:
+
+   ``pip install -e .[docs]``
+
+2. Build the docs:
+
+   ``sphinx-build -E -b html doc doc\_build\html``
+
+The gallery will appear under ``doc/_build/html/auto_examples``.
 
 
 
@@ -28,30 +50,13 @@ This gallery showcases usage examples for `sklekmeans`.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Basic usage examples for EKMeans and MiniBatchEKMeans</div>
+      <div class="sphx-glr-thumbnail-title">Basic usage examples for EKMeans and MiniBatchEKMeans.</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares clustering results for multiple algorithms: KMeans, DBSCAN, SpectralClustering from scikit-learn and EKMeans/`MiniBatchEKMeans` from this package.">
-
-.. only:: html
-
-  .. image:: /auto_examples/images/thumb/sphx_glr_plot_clustering_comparison_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_auto_examples_plot_clustering_comparison.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Comparison of clustering algorithms on toy datasets</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example reproduces the imbalanced 3-cluster Gaussian mixture used in benchmark/benchmark.py and compares the clustering results of multiple algorithms in a 2x4 grid:">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares clustering performance on an imbalanced dataset for several algorithms, including EKMeans and MiniBatchEKMeans.">
 
 .. only:: html
 
@@ -62,7 +67,7 @@ This gallery showcases usage examples for `sklekmeans`.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Imbalanced clustering comparison on a synthetic dataset (2x4 layout)</div>
+      <div class="sphx-glr-thumbnail-title">Imbalanced clustering comparison with EKMeans</div>
     </div>
 
 
@@ -77,7 +82,6 @@ This gallery showcases usage examples for `sklekmeans`.
    :hidden:
 
    /auto_examples/example
-   /auto_examples/plot_clustering_comparison
    /auto_examples/plot_imbalanced_ekmeans
 
 

@@ -6,7 +6,7 @@ Author-email: Yudong He <yhebh@connect.ust.hk>
 License: BSD-3-Clause
 Project-URL: Homepage, https://github.com/ydcnanhe/sklearn-ekmeans
 Project-URL: Documentation, https://ydcnanhe.github.io/sklearn-ekmeans
-Project-URL: Source, https://github.com/ydcnanhe/sklearn-ekmeans/sklekmeans/
+Project-URL: Source, https://github.com/ydcnanhe/sklearn-ekmeans/tree/main/sklekmeans
 Classifier: License :: OSI Approved :: BSD License
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
@@ -32,6 +32,8 @@ Requires-Dist: sphinx>=7; extra == "docs"
 Requires-Dist: pydata-sphinx-theme; extra == "docs"
 Requires-Dist: sphinx-gallery; extra == "docs"
 Requires-Dist: sphinx-design; extra == "docs"
+Requires-Dist: sphinx-copybutton; extra == "docs"
+Requires-Dist: sphinx-prompt; extra == "docs"
 Requires-Dist: numpydoc; extra == "docs"
 Requires-Dist: matplotlib; extra == "docs"
 Provides-Extra: speed
@@ -46,6 +48,7 @@ sklekmeans - Equilibrium K-Means for scikit-learn
 ![tests](https://github.com/ydcnanhe/sklekmeans/actions/workflows/python-app.yml/badge.svg)
 [![codecov](https://codecov.io/gh/ydcnanhe/sklekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklekmeans)
 ![doc](https://github.com/ydcnanhe/sklekmeans/actions/workflows/deploy-gh-pages.yml/badge.svg)
+[![docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 `sklekmeans` provides batch and mini-batch implementations of the
 Equilibrium K-Means (EKMeans) clustering algorithm. The method introduces
@@ -129,7 +132,7 @@ Documentation
 -------------
 The latest HTML documentation is hosted on GitHub Pages:
 
-https://ydcnanhe.github.io/sklearn-ekmeans
+[ydcnanhe.github.io/sklearn-ekmeans](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 Badges above reflect build status; if the link 404s, wait for the docs CI to finish.
 

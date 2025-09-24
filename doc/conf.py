@@ -9,7 +9,11 @@ from importlib.metadata import version as get_version
 project = "sklekmeans"
 author = "Yudong He"
 copyright = f"{datetime.now():%Y}, {author}"
-release = get_version("sklekmeans")
+try:
+    release = get_version("sklekmeans")
+except Exception:
+    # Fallback when building docs without installed package (e.g., clean CI)
+    release = os.environ.get("SKLEKMEANS_VERSION", "0.0.0")
 version = ".".join(release.split(".")[:3])
 
 # -- General configuration ---------------------------------------------------
@@ -33,6 +37,14 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "_templates", "Thumbs.db", ".DS_Store"]
 
+# Ensure project root and package are importable during docs build
+DOC_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.abspath(os.path.join(DOC_DIR, os.pardir))
+PKG_DIR = os.path.join(ROOT_DIR, "sklekmeans")
+for p in [ROOT_DIR, PKG_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
 default_role = "literal"
@@ -43,7 +55,9 @@ default_role = "literal"
 html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
 html_style = "css/sklekmeans.css"
-html_logo = "_static/img/logo.png"
+# Set a logo if present; otherwise skip to avoid warnings
+_logo_path = os.path.join(DOC_DIR, "_static", "img", "logo.png")
+html_logo = "_static/img/logo.png" if os.path.exists(_logo_path) else None
 html_css_files = ["css/sklekmeans.css"]
 html_sidebars = {
     "quick_start": [],
@@ -97,8 +111,8 @@ intersphinx_mapping = {
 
 # -- Options for sphinx-gallery -----------------------------------------------
 
-# Generate the plot for the gallery
-plot_gallery = True
+# Generate the plot for the gallery (string expected by sphinx-gallery settings)
+plot_gallery = "True"
 
 sphinx_gallery_conf = {
     "doc_module": "sklekmeans",

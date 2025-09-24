@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Basic usage examples for EKMeans and MiniBatchEKMeans &#8212; sklekmeans 0.1.0 documentation</title>
+    <title>&lt;no title&gt; &#8212; sklekmeans 0.1.0 documentation</title>
   
   
   
@@ -31,14 +31,13 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=27aebe0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=20097b6b" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/overrides.css?v=4ca3bc62" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/sklekmeans.css?v=27aebe0c" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,14 +48,12 @@
     <script src="../_static/documentation_options.js?v=01f34227"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=ba25eb79"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'auto_examples/example';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Comparison of clustering algorithms on toy datasets" href="plot_clustering_comparison.html" />
-    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="next" title="Imbalanced clustering comparison with EKMeans" href="plot_imbalanced_ekmeans.html" />
+    <link rel="prev" title="Examples Gallery" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -156,12 +153,43 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="index.html">
-    Examples
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quick_start.html">
+    Quick Start
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="index.html">
+    Examples Gallery
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
   </ul>
 </nav></div>
       
@@ -201,18 +229,6 @@
           
           
           <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -284,9 +300,30 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quick_start.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="index.html">
-    Examples
+    Examples Gallery
   </a>
 </li>
 
@@ -322,18 +359,6 @@
           <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/ydcnanhe/sklearn-ekmeans" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
-        </li>
 </ul></div>
         
       </div>
@@ -345,10 +370,8 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basic usage examples for EKMeans and MiniBatchEKMeans</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_clustering_comparison.html">Comparison of clustering algorithms on toy datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_imbalanced_ekmeans.html">Imbalanced clustering comparison on a synthetic dataset (2x4 layout)</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="plot_imbalanced_ekmeans.html">Imbalanced clustering comparison with EKMeans</a></li>
 </ul>
 </div>
 </nav></div>
@@ -390,9 +413,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples</a></li>
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples Gallery</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Basic usage examples for EKMeans and MiniBatchEKMeans</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
   </ul>
 </nav>
 </div>
@@ -414,19 +437,18 @@
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-example-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code.</p>
 </div>
-<section class="sphx-glr-example-title" id="basic-usage-examples-for-ekmeans-and-minibatchekmeans">
-<span id="sphx-glr-auto-examples-example-py"></span><h1>Basic usage examples for EKMeans and MiniBatchEKMeans<a class="headerlink" href="#basic-usage-examples-for-ekmeans-and-minibatchekmeans" title="Link to this heading">#</a></h1>
+<p class="sphx-glr-example-title" id="sphx-glr-auto-examples-example-py">Basic usage examples for EKMeans and MiniBatchEKMeans.</p>
 <p>Run with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">examples</span><span class="o">/</span><span class="n">example</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklekmeans</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a></a></a><span class="p">,</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a></a></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklekmeans</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a><span class="p">,</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a>
 
 <span class="c1"># Generate synthetic data</span>
-<span class="n">X</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a></a></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">C_init</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a></a></a><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">float64</span></a></a></a><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a></a></a><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">C_init</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">C_init</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">np</span><span class="o">.</span><span class="n">float64</span></a><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <a href="../generated/sklekmeans.EKMeans.html#sklekmeans.EKMeans" title="sklekmeans.EKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">EKMeans</span></a><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">C_init</span><span class="p">)</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 20 labels:&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 5 membership rows:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">U_</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
@@ -434,14 +456,14 @@ to download the full example code.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iterations:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Objective J:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">objective_</span><span class="p">)</span>
 
-<span class="n">X_new</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a></a></a><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">X_new</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predicted clusters for new samples:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Membership for new samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">membership</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distances for new samples:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_new</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== MiniBatchEKMeans demo ===&quot;</span><span class="p">)</span>
-<span class="n">X_large</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a></a></a><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">mb_model</span> <span class="o">=</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a></a></a><span class="p">(</span>
+<span class="n">X_large</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html#numpy.random.rand" title="numpy.random.rand" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">mb_model</span> <span class="o">=</span> <a href="../generated/sklekmeans.MiniBatchEKMeans.html#sklekmeans.MiniBatchEKMeans" title="sklekmeans.MiniBatchEKMeans" class="sphx-glr-backref-module-sklekmeans sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MiniBatchEKMeans</span></a><span class="p">(</span>
     <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="s2">&quot;dvariance&quot;</span><span class="p">,</span>
@@ -479,7 +501,6 @@ to download the full example code.</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</section>
 
 
                 </article>
@@ -497,15 +518,15 @@ to download the full example code.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title">Examples Gallery</p>
       </div>
     </a>
     <a class="right-next"
-       href="plot_clustering_comparison.html"
+       href="plot_imbalanced_ekmeans.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Comparison of clustering algorithms on toy datasets</p>
+        <p class="prev-next-title">Imbalanced clustering comparison with EKMeans</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -519,6 +540,18 @@ to download the full example code.</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
