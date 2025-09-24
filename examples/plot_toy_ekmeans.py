@@ -31,7 +31,7 @@ Algorithms (in order)
 
 Note: This example is referring to the original scikit-learn example
 `here <https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html>`_.
-========== 
+==========
 
 """
 
@@ -43,7 +43,6 @@ from itertools import cycle, islice
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 from sklearn import cluster, datasets, mixture
 from sklearn.neighbors import kneighbors_graph
 from sklearn.preprocessing import StandardScaler
@@ -172,7 +171,7 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
     # Create cluster objects
     # ============
     ekm = EKMeans(
-        n_clusters=params["n_clusters"], 
+        n_clusters=params["n_clusters"],
         random_state=params["random_state"],
     )
     ms = cluster.MeanShift(bandwidth=bandwidth, bin_seeding=True)
