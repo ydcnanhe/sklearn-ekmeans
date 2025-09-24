@@ -12,11 +12,12 @@ The intent is similar to the clustering comparison in scikit-learn's docs.
 
 # sphinx_gallery_thumbnail_number = 2
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn import datasets
+from sklearn.cluster import DBSCAN, SpectralClustering
+from sklearn.cluster import KMeans as SKKMeans
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans as SKKMeans, DBSCAN, SpectralClustering
 
 from sklekmeans import EKMeans, MiniBatchEKMeans
 

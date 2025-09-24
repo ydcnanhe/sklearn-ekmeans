@@ -11,6 +11,7 @@ Run with::
 """
 
 import numpy as np
+
 from sklekmeans import EKMeans, MiniBatchEKMeans
 
 # Generate synthetic data
@@ -32,26 +33,26 @@ print("Distances for new samples:\n", model.transform(X_new))
 print("\n=== MiniBatchEKMeans demo ===")
 X_large = np.random.rand(2000, 2)
 mb_model = MiniBatchEKMeans(
-	n_clusters=2,
-	metric="euclidean",
-	alpha="dvariance",
-	scale=2.0,
-	batch_size=256,
-	max_epochs=5,
-	init="k-means++",
-	shuffle=True,
-	learning_rate=None,  # accumulation method
-	tol=1e-3,
-	reassign_patience=3,
-	monitor_size=512,
-	print_every=1,
-	verbose=1,
-	use_numba=False,
-	random_state=0,
+    n_clusters=2,
+    metric="euclidean",
+    alpha="dvariance",
+    scale=2.0,
+    batch_size=256,
+    max_epochs=5,
+    init="k-means++",
+    shuffle=True,
+    learning_rate=None,  # accumulation method
+    tol=1e-3,
+    reassign_patience=3,
+    monitor_size=512,
+    print_every=1,
+    verbose=1,
+    use_numba=False,
+    random_state=0,
 )
 mb_model.fit(X_large)
 print("Mini-batch centers:\n", mb_model.cluster_centers_)
 print(
-	"Approx objective last epoch:",
-	mb_model.objective_approx_[-1] if mb_model.objective_approx_ else None,
+    "Approx objective last epoch:",
+    mb_model.objective_approx_[-1] if mb_model.objective_approx_ else None,
 )
