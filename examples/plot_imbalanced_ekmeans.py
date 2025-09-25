@@ -32,7 +32,7 @@ from sklekmeans import EKMeans, MiniBatchEKMeans
 def _make_imbalanced(
     n_samples=2000,
     weights=(0.840, 0.01, 0.05),
-    centers=np.array([[-3,-2],[2,-2],[2,2]]),
+    centers=np.array([[-3, -2], [2, -2], [2, 2]]),
     cluster_std=(1.0, 1.0, 1.0),
     random_state=0,
 ):
@@ -74,9 +74,15 @@ def _plot(ax, X, labels, title, *, estimator=None, runtime=None):
     # If centroid-based, overlay centers
     if estimator is not None:
         centers = None
-        if hasattr(estimator, "cluster_centers_") and estimator.cluster_centers_ is not None:
+        if (
+            hasattr(estimator, "cluster_centers_")
+            and estimator.cluster_centers_ is not None
+        ):
             centers = estimator.cluster_centers_
-        elif hasattr(estimator, "cluster_centers_indices_") and estimator.cluster_centers_indices_ is not None:
+        elif (
+            hasattr(estimator, "cluster_centers_indices_")
+            and estimator.cluster_centers_indices_ is not None
+        ):
             try:
                 centers = X[np.asarray(estimator.cluster_centers_indices_, dtype=int)]
             except Exception:
@@ -107,7 +113,14 @@ def main():
     t0 = time.perf_counter()
     mbekm = MiniBatchEKMeans(n_clusters=3, random_state=0, batch_size=256).fit(X)
     t1 = time.perf_counter()
-    _plot(axes[2], X, mbekm.labels_, "MiniBatchEKMeans", estimator=mbekm, runtime=(t1 - t0))
+    _plot(
+        axes[2],
+        X,
+        mbekm.labels_,
+        "MiniBatchEKMeans",
+        estimator=mbekm,
+        runtime=(t1 - t0),
+    )
 
     t0 = time.perf_counter()
     km = KMeans(n_clusters=3, n_init=10, random_state=0).fit(X)
@@ -115,7 +128,9 @@ def main():
     _plot(axes[3], X, km.labels_, "KMeans", estimator=km, runtime=(t1 - t0))
 
     t0 = time.perf_counter()
-    mbk = MiniBatchKMeans(n_clusters=3, n_init=10, random_state=0, batch_size=256).fit(X)
+    mbk = MiniBatchKMeans(n_clusters=3, n_init=10, random_state=0, batch_size=256).fit(
+        X
+    )
     t1 = time.perf_counter()
     _plot(axes[4], X, mbk.labels_, "MiniBatchKMeans", estimator=mbk, runtime=(t1 - t0))
 
