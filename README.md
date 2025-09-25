@@ -2,7 +2,7 @@ sklekmeans - Equilibrium K-Means for scikit-learn
 =================================================
 
 [![Unit Tests](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml/badge.svg)](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml)
-[![codecov](https://codecov.io/gh/ydcnanhe/sklekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans)
+[![codecov](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans)
 [![docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 `sklekmeans` provides batch and mini-batch implementations of the
