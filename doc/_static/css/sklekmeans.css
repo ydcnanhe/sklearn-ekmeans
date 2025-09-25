@@ -3,3 +3,29 @@
 :root {
   --sklekmeans-accent: #0b62a4;
 }
+
+/* Homepage card polish */
+.sd-card.intro-card {
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  height: 100%;
+}
+
+.sd-card.intro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.12);
+}
+
+/* Make card body center nicely and keep consistent height */
+.sd-card.intro-card .sd-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 120px;
+}
+
+/* Ensure card image has some breathing room */
+.sd-card.intro-card .sd-card-img-top {
+  padding: 12px 12px 0 12px;
+}

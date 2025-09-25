@@ -24,6 +24,7 @@ This is the documentation for `sklekmeans` to help at extending
         :link: quick_start
         :link-type: doc
         :text-align: center
+        :img-top: _static/img/index_getting_started.svg
 
         Learn how to install, fit, and evaluate EKMeans on your data.
 
@@ -33,6 +34,7 @@ This is the documentation for `sklekmeans` to help at extending
         :link: user_guide
         :link-type: doc
         :text-align: center
+        :img-top: _static/img/index_user_guide.svg
 
         Concepts, guidance, and detailed usage of EKMeans and MiniBatchEKMeans.
 
@@ -42,6 +44,7 @@ This is the documentation for `sklekmeans` to help at extending
         :link: api
         :link-type: doc
         :text-align: center
+        :img-top: _static/img/index_api.svg
 
         Full API reference for sklekmeans estimators, functions, and utilities.
 
@@ -51,6 +54,7 @@ This is the documentation for `sklekmeans` to help at extending
         :link: auto_examples/index
         :link-type: doc
         :text-align: center
+        :img-top: _static/img/index_examples.svg
 
         Practical examples demonstrating clustering on balanced and imbalanced datasets.
 
