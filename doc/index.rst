@@ -1,10 +1,3 @@
-sklekmeans Documentation
-=========================
-
-Equilibrium K-Means (EKMeans) clustering algorithms compatible with scikit-learn.
-
-:notoc:
-
 #############################################
 sklekmeans: a scikit-learn extension
 #############################################
@@ -28,66 +21,38 @@ This is the documentation for `sklekmeans` to help at extending
     .. grid-item-card:: Getting started
         :class-card: intro-card
         :shadow: md
+        :link: quick_start
+        :link-type: doc
+        :text-align: center
 
-    Learn how to install, fit, and evaluate EKMeans on your data.
-
-        +++
-
-        .. button-ref:: quick_start
-            :ref-type: doc
-            :click-parent:
-            :color: secondary
-            :expand:
-
-            To the getting started guideline
+        Learn how to install, fit, and evaluate EKMeans on your data.
 
     .. grid-item-card::  User guide
         :class-card: intro-card
         :shadow: md
+        :link: user_guide
+        :link-type: doc
+        :text-align: center
 
-    Concepts, guidance, and detailed usage of EKMeans and MiniBatchEKMeans.
-
-        +++
-
-        .. button-ref:: user_guide
-            :ref-type: doc
-            :click-parent:
-            :color: secondary
-            :expand:
-
-            To the user guide
+        Concepts, guidance, and detailed usage of EKMeans and MiniBatchEKMeans.
 
     .. grid-item-card::  API reference
         :class-card: intro-card
         :shadow: md
+        :link: api
+        :link-type: doc
+        :text-align: center
 
-    Full API reference for sklekmeans estimators, functions, and utilities.
-
-        +++
-
-        .. button-ref:: api
-            :ref-type: doc
-            :click-parent:
-            :color: secondary
-            :expand:
-
-            To the reference guide
+        Full API reference for sklekmeans estimators, functions, and utilities.
 
     .. grid-item-card::  Examples
         :class-card: intro-card
         :shadow: md
+        :link: auto_examples/index
+        :link-type: doc
+        :text-align: center
 
-    Practical examples demonstrating clustering on balanced and imbalanced datasets.
-
-        +++
-
-        .. button-ref:: auto_examples/index
-            :ref-type: doc
-            :click-parent:
-            :color: secondary
-            :expand:
-
-            To the gallery of examples
+        Practical examples demonstrating clustering on balanced and imbalanced datasets.
 
 
 .. toctree::
@@ -98,6 +63,7 @@ This is the documentation for `sklekmeans` to help at extending
     quick_start
     user_guide
     api
+    benchmarks
     auto_examples/index
 
 References
