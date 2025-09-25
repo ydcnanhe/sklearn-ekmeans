@@ -3,20 +3,6 @@ sklekmeans Documentation
 
 Equilibrium K-Means (EKMeans) clustering algorithms compatible with scikit-learn.
 
-Contents:
-
-.. toctree::
-    :maxdepth: 2
-    :caption: User Guide
-
-    user_guide
-    benchmarks
-    api
-.. sklekmeans documentation master file, created by
-   sphinx-quickstart on Mon Jan 18 14:44:12 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 :notoc:
 
 #############################################
@@ -26,8 +12,8 @@ sklekmeans: a scikit-learn extension
 **Date**: |today| **Version**: |version|
 
 **Useful links**:
-`Source Repository <https://github.com/ydcnanhe/sklekmeans>`__ |
-`Issues & Ideas <https://github.com/ydcnanhe/sklekmeans/issues>`__ |
+`Source Repository <https://github.com/ydcnanhe/sklearn-eqkmeans>`__ |
+`Issues & Ideas <https://github.com/ydcnanhe/sklearn-eqkmeans/issues>`__ |
 
 This is the documentation for `sklekmeans` to help at extending
 `scikit-learn`. It provides some information on how to build your own custom
@@ -43,7 +29,7 @@ This is the documentation for `sklekmeans` to help at extending
         :class-card: intro-card
         :shadow: md
 
-        Information regarding this template and how to modify it for your own project.
+    Learn how to install, fit, and evaluate EKMeans on your data.
 
         +++
 
@@ -59,8 +45,7 @@ This is the documentation for `sklekmeans` to help at extending
         :class-card: intro-card
         :shadow: md
 
-        An example of narrative documentation. Here, we will explain how to create your
-        own `scikit-learn` estimator.
+    Concepts, guidance, and detailed usage of EKMeans and MiniBatchEKMeans.
 
         +++
 
@@ -76,8 +61,7 @@ This is the documentation for `sklekmeans` to help at extending
         :class-card: intro-card
         :shadow: md
 
-        An example of API documentation. This is an example how to use `sphinx` to
-        automatically generate reference API page.
+    Full API reference for sklekmeans estimators, functions, and utilities.
 
         +++
 
@@ -93,8 +77,7 @@ This is the documentation for `sklekmeans` to help at extending
         :class-card: intro-card
         :shadow: md
 
-        A set of examples. It complements the User Guide and it is the right place to
-        show how to use your compatible estimator.
+    Practical examples demonstrating clustering on balanced and imbalanced datasets.
 
         +++
 

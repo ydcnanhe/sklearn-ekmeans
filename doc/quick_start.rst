@@ -12,4 +12,4 @@ Install and try EKMeans in a few lines:
     ekm = EKMeans(n_clusters=3, random_state=0, alpha='dvariance').fit(X)
     print(ekm.cluster_centers_)
 
-See the :ref:`User Guide <user_guide>` for more details.
+See the :ref:`User Guide <ekmeans_user_guide>` for more details.

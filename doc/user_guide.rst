@@ -1,3 +1,5 @@
+.. _ekmeans_user_guide:
+
 User Guide
 ==========
 
