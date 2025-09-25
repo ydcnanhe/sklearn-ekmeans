@@ -27,5 +27,37 @@
 
 /* Ensure card image has some breathing room */
 .sd-card.intro-card .sd-card-img-top {
-  padding: 12px 12px 0 12px;
+  height: 64px; /* reduce icon size */
+  width: auto;
+  display: block;
+  margin: 12px auto 0 auto; /* center horizontally */
+  padding: 0; /* override any default padding */
+}
+
+/* Larger titles at the top of cards */
+.sd-card.intro-card .sd-card-header {
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding-top: 14px;
+  padding-bottom: 4px;
+}
+
+/* Make the 'Getting started' card title larger (target header and title text) */
+.sd-card.intro-card.intro-card-title-lg .sd-card-header,
+.sd-card.intro-card.intro-card-title-lg .sd-card-title,
+.sd-card.intro-card.intro-card-title-lg .sd-card-header .sd-card-text {
+  font-size: 1.6rem !important;
+  line-height: 1.25;
+}
+
+/* Image inside card body (when using explicit .. image::) */
+.sd-card.intro-card .sd-card-body .intro-card-img {
+  display: block;
+  margin: 6px auto 8px auto;
+}
+
+/* Description paragraph */
+.sd-card.intro-card .sd-card-body p {
+  margin-top: 6px;
+  margin-bottom: 12px;
 }

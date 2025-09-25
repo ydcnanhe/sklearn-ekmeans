@@ -19,42 +19,54 @@ This is the documentation for `sklekmeans` to help at extending
     :class-container: sd-text-center
 
     .. grid-item-card:: Getting started
-        :class-card: intro-card
+        :class-card: intro-card intro-card-title-lg
         :shadow: md
         :link: quick_start
         :link-type: doc
         :text-align: center
-        :img-top: _static/img/index_getting_started.svg
+        
+        .. image:: _static/img/index_getting_started.gif
+            :height: 96
+            :class: intro-card-img
 
         Learn how to install, fit, and evaluate EKMeans on your data.
 
     .. grid-item-card::  User guide
-        :class-card: intro-card
+        :class-card: intro-card intro-card-title-lg
         :shadow: md
         :link: user_guide
         :link-type: doc
         :text-align: center
-        :img-top: _static/img/index_user_guide.svg
+        
+        .. image:: _static/img/index_user_guide.gif
+            :height: 96
+            :class: intro-card-img
 
         Concepts, guidance, and detailed usage of EKMeans and MiniBatchEKMeans.
 
     .. grid-item-card::  API reference
-        :class-card: intro-card
+        :class-card: intro-card intro-card-title-lg
         :shadow: md
         :link: api
         :link-type: doc
         :text-align: center
-        :img-top: _static/img/index_api.svg
+        
+        .. image:: _static/img/index_api.gif
+            :height: 96
+            :class: intro-card-img
 
         Full API reference for sklekmeans estimators, functions, and utilities.
 
     .. grid-item-card::  Examples
-        :class-card: intro-card
+        :class-card: intro-card intro-card-title-lg
         :shadow: md
         :link: auto_examples/index
         :link-type: doc
         :text-align: center
-        :img-top: _static/img/index_examples.svg
+        
+        .. image:: _static/img/index_examples.gif
+            :height: 96
+            :class: intro-card-img
 
         Practical examples demonstrating clustering on balanced and imbalanced datasets.
 
