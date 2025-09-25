@@ -7,6 +7,7 @@ sklekmeans: a scikit-learn extension
 **Useful links**:
 `Source Repository <https://github.com/ydcnanhe/sklearn-eqkmeans>`__ |
 `Issues & Ideas <https://github.com/ydcnanhe/sklearn-eqkmeans/issues>`__ |
+`Build Docs Locally <https://github.com/ydcnanhe/sklearn-ekmeans/blob/main/doc/README.md>`__ |
 
 This is the documentation for `sklekmeans` to help at extending
 `scikit-learn`. It provides some information on how to build your own custom
