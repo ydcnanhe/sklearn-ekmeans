@@ -1,7 +1,8 @@
 sklekmeans - Equilibrium K-Means for scikit-learn
 =================================================
 
-[![codecov](https://codecov.io/gh/ydcnanhe/sklekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklekmeans)
+[![Unit Tests](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml/badge.svg)](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml)
+[![codecov](https://codecov.io/gh/ydcnanhe/sklekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans)
 [![docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 `sklekmeans` provides batch and mini-batch implementations of the
@@ -30,7 +31,12 @@ cd sklearn-ekmeans
 2. (Recommended) Create a fresh virtual environment.
 3. Choose one of the following install modes:
 
-Base (runtime only):
+Base (regular installation):
+```bash
+pip install .
+```
+
+Base (editable installation):
 ```bash
 pip install -e .
 ```
