@@ -1015,7 +1015,9 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
                             centers[k] = (1.0 - lr) * centers[k] + lr * xbar_k
 
                     if self.learning_rate is not None and self.reassign_patience > 0:
-                        to_reassign = np.where(empty_counts >= self.reassign_patience)[0]
+                        to_reassign = np.where(empty_counts >= self.reassign_patience)[
+                            0
+                        ]
                         if to_reassign.size > 0:
                             far_idx = np.argmax(D2, axis=0)
                             for k in to_reassign:
@@ -1053,9 +1055,17 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         self.cluster_centers_ = best_centers
         self.alpha_ = best_alpha
         self.n_epochs_ = best_epoch
-        self.counts_ = best_counts if best_counts is not None else np.zeros(K, dtype=float)
-        self.sums_ = best_sums if best_sums is not None else np.zeros((K, n_features), dtype=float)
-        self.objective_approx_ = best_obj_approx_hist if best_obj_approx_hist is not None else []
+        self.counts_ = (
+            best_counts if best_counts is not None else np.zeros(K, dtype=float)
+        )
+        self.sums_ = (
+            best_sums
+            if best_sums is not None
+            else np.zeros((K, n_features), dtype=float)
+        )
+        self.objective_approx_ = (
+            best_obj_approx_hist if best_obj_approx_hist is not None else []
+        )
 
         D = _pairwise_distance(X, self.cluster_centers_, self.metric)
         D2 = D**2
