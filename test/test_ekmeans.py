@@ -48,8 +48,11 @@ def test_minibatchekm_basic():
 def test_alpha_dvariance():
     X = _toy_data()
     ekm = EKMeans(n_clusters=2, alpha='dvariance', random_state=0)
+    minibatchekm = MiniBatchEKMeans(n_clusters=2, alpha='dvariance', random_state=0)
     ekm.fit(X)
+    minibatchekm.fit(X)
     assert ekm.alpha_ > 0
+    assert minibatchekm.alpha_ > 0
 
 
 def test_invalid_metric():
@@ -68,6 +71,16 @@ def test_minibatch_partial_fit():
     # labels_ not maintained incrementally during partial_fit-only usage
     assert not hasattr(mb, 'labels_')
 
+
+def test_different_metrics_and_init_array():
+    X = _toy_data()
+    # init from small subset
+    init = X[:2].copy()
+    ekm_eu = EKMeans(n_clusters=2, metric="euclidean", random_state=0, init=init).fit(X)
+    ekm_ma = EKMeans(n_clusters=2, metric="manhattan",  random_state=0, n_init=5).fit(X)
+    ekm_rd = EKMeans(n_clusters=2, metric="euclidean",  random_state=0, init="random").fit(X)
+    assert ekm_eu.cluster_centers_.shape == ekm_ma.cluster_centers_.shape == ekm_rd.cluster_centers_.shape == (2, X.shape[1])
+
 if __name__ == '__main__':
     test_ekm_estimator_checks()
     test_ekm_basic_fit_predict()
@@ -75,3 +88,4 @@ if __name__ == '__main__':
     test_alpha_dvariance()
     test_invalid_metric()
     test_minibatch_partial_fit()
+    test_different_metrics_and_init_array()
