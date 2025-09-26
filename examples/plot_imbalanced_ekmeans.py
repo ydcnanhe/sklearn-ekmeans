@@ -111,7 +111,7 @@ def main():
     _plot(axes[1], X, ekm.labels_, "EKMeans", estimator=ekm, runtime=(t1 - t0))
 
     t0 = time.perf_counter()
-    mbekm = MiniBatchEKMeans(n_clusters=3, random_state=0, batch_size=256).fit(X)
+    mbekm = MiniBatchEKMeans(n_clusters=3, n_init=10, random_state=0, batch_size=256).fit(X)
     t1 = time.perf_counter()
     _plot(
         axes[2],

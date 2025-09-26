@@ -645,6 +645,12 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         variance of updates but increases per-step cost and memory.
     max_epochs : int, default=10
         Maximum number of full passes (epochs) over the training data.
+    n_init : int, default=1
+        Number of random initialisations. The algorithm will run
+        mini-batch optimisation ``n_init`` times with different seeds
+        (derived from ``random_state``) and keep the run with the lowest
+        internal equilibrium objective (evaluated on the full dataset),
+        which improves robustness to local minima.
     init : {'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
         Initialization method.
         * 'k-means++' : probabilistic seeding adapted for chosen metric.
@@ -783,6 +789,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         "scale": [Interval(Real, 0, None, closed="neither")],
         "batch_size": [Interval(Integral, 1, None, closed="left")],
         "max_epochs": [Interval(Integral, 1, None, closed="left")],
+        "n_init": [Interval(Integral, 1, None, closed="left")],
         "init": [StrOptions({"k-means++", "random"}), np.ndarray],
         "init_size": [None, Interval(Integral, 1, None, closed="left")],
         "shuffle": [bool],
@@ -807,6 +814,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         scale=2.0,
         batch_size=256,
         max_epochs=10,
+        n_init=1,
         init="k-means++",
         init_size=None,
         shuffle=True,
@@ -827,6 +835,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         self.scale = scale
         self.batch_size = batch_size
         self.max_epochs = max_epochs
+        self.n_init = n_init
         self.init = init
         self.init_size = init_size
         self.shuffle = shuffle
@@ -934,103 +943,125 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         n_samples, n_features = X.shape
         K = self.n_clusters
         Var_X = np.mean(np.var(X, axis=0))
-
-        centers = self._init_centers(X, rng)
         alpha = self._resolve_alpha(X, rng)
 
-        empty_counts = np.zeros(K, dtype=np.int64)
-        prev = centers.copy()
-        self.objective_approx_ = []
+        best_obj = np.inf
+        best_centers = None
+        best_alpha = None
+        best_epoch = None
+        best_counts = None
+        best_sums = None
+        best_obj_approx_hist = None
 
-        if self.monitor_size is None:
-            monitor_idx = np.arange(n_samples)
-        else:
-            ms = min(n_samples, self.monitor_size)
-            monitor_idx = rng.choice(n_samples, size=ms, replace=False)
+        for run in range(self.n_init):
+            centers = self._init_centers(X, rng)
 
-        Nk = np.zeros(K, dtype=float)
-        Sk = np.zeros((K, n_features), dtype=float)
-
-        for epoch in range(1, self.max_epochs + 1):
-            if self.shuffle:
-                order = rng.permutation(n_samples)
-            else:
-                order = np.arange(n_samples)
-
-            for start in range(0, n_samples, self.batch_size):
-                end = min(start + self.batch_size, n_samples)
-                batch_idx = order[start:end]
-                Xb = X[batch_idx]
-
-                D2 = _pairwise_distance(Xb, centers, self.metric) ** 2
-                D2_shift = D2 - D2.min(axis=1, keepdims=True)
-                W = self._calc_weight(D2_shift, alpha)
-                wk_sum = W.sum(axis=0)
-                update_mask = wk_sum > self.reassignment_ratio * Xb.shape[0]
-
-                for k in range(K):
-                    if update_mask[k]:
-                        empty_counts[k] = 0
-                    else:
-                        empty_counts[k] += 1
-
-                if self.learning_rate is None:
-                    if not np.all(update_mask):
-                        W_eff = W.copy()
-                        W_eff[:, ~update_mask] = 0.0
-                        Sk += W_eff.T @ Xb
-                        Nk += W_eff.sum(axis=0)
-                    else:
-                        Sk += W.T @ Xb
-                        Nk += wk_sum
-                    denom = np.maximum(Nk[:, None], np.finfo(float).eps)
-                    centers = Sk / denom
-                else:
-                    lr = float(self.learning_rate)
-                    for k in range(K):
-                        if not update_mask[k]:
-                            continue
-                        wk = wk_sum[k]
-                        if wk <= 0:
-                            continue
-                        xbar_k = (W[:, k][:, None] * Xb).sum(axis=0) / wk
-                        centers[k] = (1.0 - lr) * centers[k] + lr * xbar_k
-
-                if self.learning_rate is not None and self.reassign_patience > 0:
-                    to_reassign = np.where(empty_counts >= self.reassign_patience)[0]
-                    if to_reassign.size > 0:
-                        far_idx = np.argmax(D2, axis=0)
-                        for k in to_reassign:
-                            centers[k] = Xb[far_idx[k]]
-                            empty_counts[k] = 0
-
-            center_shift_tot = np.linalg.norm(centers - prev, ord="fro")
+            empty_counts = np.zeros(K, dtype=np.int64)
             prev = centers.copy()
-            obj_approx = self._approx_objective(X[monitor_idx], centers, alpha)
-            self.objective_approx_.append(obj_approx)
-            if self.verbose and (epoch % self.print_every == 0):
-                print(
-                    f"[MiniBatchEKM] epoch {epoch}/{self.max_epochs}  center shift / var(X) = {center_shift_tot / Var_X:<.3e}  objective≈{obj_approx:<.3e}"
-                )
-            if self.tol > 0.0 and center_shift_tot <= Var_X * self.tol:
-                if self.verbose:
+            obj_approx_hist = []
+
+            if self.monitor_size is None:
+                monitor_idx = np.arange(n_samples)
+            else:
+                ms = min(n_samples, self.monitor_size)
+                monitor_idx = rng.choice(n_samples, size=ms, replace=False)
+
+            Nk = np.zeros(K, dtype=float)
+            Sk = np.zeros((K, n_features), dtype=float)
+
+            for epoch in range(1, self.max_epochs + 1):
+                if self.shuffle:
+                    order = rng.permutation(n_samples)
+                else:
+                    order = np.arange(n_samples)
+
+                for start in range(0, n_samples, self.batch_size):
+                    end = min(start + self.batch_size, n_samples)
+                    batch_idx = order[start:end]
+                    Xb = X[batch_idx]
+
+                    D2 = _pairwise_distance(Xb, centers, self.metric) ** 2
+                    D2_shift = D2 - D2.min(axis=1, keepdims=True)
+                    W = self._calc_weight(D2_shift, alpha)
+                    wk_sum = W.sum(axis=0)
+                    update_mask = wk_sum > self.reassignment_ratio * Xb.shape[0]
+
+                    for k in range(K):
+                        if update_mask[k]:
+                            empty_counts[k] = 0
+                        else:
+                            empty_counts[k] += 1
+
+                    if self.learning_rate is None:
+                        if not np.all(update_mask):
+                            W_eff = W.copy()
+                            W_eff[:, ~update_mask] = 0.0
+                            Sk += W_eff.T @ Xb
+                            Nk += W_eff.sum(axis=0)
+                        else:
+                            Sk += W.T @ Xb
+                            Nk += wk_sum
+                        denom = np.maximum(Nk[:, None], np.finfo(float).eps)
+                        centers = Sk / denom
+                    else:
+                        lr = float(self.learning_rate)
+                        for k in range(K):
+                            if not update_mask[k]:
+                                continue
+                            wk = wk_sum[k]
+                            if wk <= 0:
+                                continue
+                            xbar_k = (W[:, k][:, None] * Xb).sum(axis=0) / wk
+                            centers[k] = (1.0 - lr) * centers[k] + lr * xbar_k
+
+                    if self.learning_rate is not None and self.reassign_patience > 0:
+                        to_reassign = np.where(empty_counts >= self.reassign_patience)[0]
+                        if to_reassign.size > 0:
+                            far_idx = np.argmax(D2, axis=0)
+                            for k in to_reassign:
+                                centers[k] = Xb[far_idx[k]]
+                                empty_counts[k] = 0
+
+                center_shift_tot = np.linalg.norm(centers - prev, ord="fro")
+                prev = centers.copy()
+                obj_approx = self._approx_objective(X[monitor_idx], centers, alpha)
+                obj_approx_hist.append(obj_approx)
+                if self.verbose and (epoch % self.print_every == 0):
                     print(
-                        f"[MiniBatchEKM] Converged at epoch {epoch} (center shift / var(X) "
-                        f"{center_shift_tot / Var_X:<.3e} <= tol {self.tol:<.3e})."
+                        f"[MiniBatchEKM] run {run+1}/{self.n_init} epoch {epoch}/{self.max_epochs}  center shift / var(X) = {center_shift_tot / Var_X:<.3e}  objective≈{obj_approx:<.3e}"
                     )
-                break
+                if self.tol > 0.0 and center_shift_tot <= Var_X * self.tol:
+                    if self.verbose:
+                        print(
+                            f"[MiniBatchEKM] Converged at epoch {epoch} (center shift / var(X) "
+                            f"{center_shift_tot / Var_X:<.3e} <= tol {self.tol:<.3e})."
+                        )
+                    break
 
-        self.cluster_centers_ = centers
-        self.alpha_ = alpha
-        self.n_epochs_ = epoch
-        self.counts_ = Nk
-        self.sums_ = Sk
+            # Evaluate full objective on X to select best run
+            obj_full = self._approx_objective(X, centers, alpha)
+            if obj_full < best_obj:
+                best_obj = obj_full
+                best_centers = centers.copy()
+                best_alpha = float(alpha)
+                best_epoch = int(epoch)
+                best_counts = Nk.copy()
+                best_sums = Sk.copy()
+                best_obj_approx_hist = list(obj_approx_hist)
 
-        D = _pairwise_distance(X, centers, self.metric)
+        # Assign best run results to estimator
+        self.cluster_centers_ = best_centers
+        self.alpha_ = best_alpha
+        self.n_epochs_ = best_epoch
+        self.counts_ = best_counts if best_counts is not None else np.zeros(K, dtype=float)
+        self.sums_ = best_sums if best_sums is not None else np.zeros((K, n_features), dtype=float)
+        self.objective_approx_ = best_obj_approx_hist if best_obj_approx_hist is not None else []
+
+        D = _pairwise_distance(X, self.cluster_centers_, self.metric)
         D2 = D**2
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
-        self.W_ = self._calc_weight(D2_shift, alpha)
-        E = np.exp(-alpha * D2_shift)
+        self.W_ = self._calc_weight(D2_shift, self.alpha_)
+        E = np.exp(-self.alpha_ * D2_shift)
         self.U_ = E / np.sum(E, axis=1, keepdims=True)
         # Hard labels for training data (not maintained incrementally during partial_fit)
         self.labels_ = np.argmin(D, axis=1)

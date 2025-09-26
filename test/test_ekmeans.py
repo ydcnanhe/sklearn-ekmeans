@@ -32,7 +32,7 @@ def test_ekm_basic_fit_predict():
 
 def test_minibatchekm_basic():
     X = _toy_data()
-    mb = MiniBatchEKMeans(n_clusters=2, random_state=0, max_epochs=5, batch_size=16)
+    mb = MiniBatchEKMeans(n_clusters=2, random_state=0, n_init=2, max_epochs=5, batch_size=16)
     mb.fit(X)
     assert mb.cluster_centers_.shape == (2, 2)
     labels = mb.predict(X)
