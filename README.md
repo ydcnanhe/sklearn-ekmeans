@@ -37,32 +37,44 @@ Optional extras:
 pip install "sklekmeans[speed]"
 ```
 
+From source (latest main):
+
+- Basic installation
+
+```bash
+git clone https://github.com/ydcnanhe/sklearn-ekmeans.git
+cd sklearn-ekmeans
+pip install .
+```
+
+- Or in editable mode
+
+```bash
+pip install -e .
+```
+
+- With numba acceleration
+
+```bash
+pip install -e .[speed]
+```
+
 - Development tools (tests, lint):
 
 ```bash
-pip install "sklekmeans[dev]"
+pip install -e .[dev]
 ```
 
 - Docs build dependencies:
 
 ```bash
-pip install "sklekmeans[docs]"
+pip install -e .[docs]
 ```
 
 - Everything (dev + docs + speed):
 
 ```bash
-pip install "sklekmeans[all]"
-```
-
-From source (latest main):
-
-```bash
-git clone https://github.com/ydcnanhe/sklearn-ekmeans.git
-cd sklearn-ekmeans
-pip install -e .
-# or with extras, e.g. speed
-pip install -e .[speed]
+pip install -e .[all]
 ```
 
 Quick Start
