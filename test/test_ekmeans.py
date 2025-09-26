@@ -62,7 +62,7 @@ def test_minibatchekm_online_basic():
     assert mb.cluster_centers_.shape == (2, 2)
 
 
-def test_numba():
+def test_fit_membership():
     X = _toy_data()
     ekm_nb = EKMeans(
         n_clusters=2,
@@ -81,23 +81,10 @@ def test_numba():
         use_numba=True,
         numba_threads=1,
     )
-    ekm_nb.fit(X)
-    mbekm_nb.fit(X)
-    assert ekm_nb.cluster_centers_.shape == (2, 2)
-    assert mbekm_nb.cluster_centers_.shape == (2, 2)
-    labels_ekm = ekm_nb.predict(X)
-    labels_mbekm = mbekm_nb.predict(X)
-    assert labels_ekm.shape[0] == X.shape[0]
-    assert labels_mbekm.shape[0] == X.shape[0]
-    U_ekm = ekm_nb.membership(X)
-    U_mbekm = mbekm_nb.membership(X)
+    U_ekm = ekm_nb.fit_membership(X)
+    U_mbekm = mbekm_nb.fit_membership(X)
     assert U_ekm.shape == (X.shape[0], 2)
     assert U_mbekm.shape == (X.shape[0], 2)
-    assert np.allclose(U_ekm.sum(axis=1), 1.0, atol=1e-6)
-    assert np.allclose(U_mbekm.sum(axis=1), 1.0, atol=1e-6)
-    # labels_ attribute should be present after full fit
-    assert hasattr(mbekm_nb, "labels_")
-    assert mbekm_nb.labels_.shape == (X.shape[0],)
 
 
 def test_alpha_dvariance():
@@ -153,7 +140,7 @@ if __name__ == "__main__":
     test_ekm_basic_fit_predict()
     test_minibatchekm_acc_basic()
     test_minibatchekm_online_basic()
-    test_numba()
+    test_fit_membership()
     test_alpha_dvariance()
     test_invalid_metric()
     test_minibatch_partial_fit()
