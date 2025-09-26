@@ -19,7 +19,7 @@ def _toy_data():
 
 def test_ekm_basic_fit_predict():
     X = _toy_data()
-    ekm = EKMeans(n_clusters=2, random_state=0, n_init=2, max_iter=50)
+    ekm = EKMeans(n_clusters=2, random_state=0, n_init=2, max_iter=50, verbose=1)
     ekm.fit(X)
     assert ekm.cluster_centers_.shape == (2, 2)
     labels = ekm.predict(X)
@@ -33,7 +33,7 @@ def test_ekm_basic_fit_predict():
 def test_minibatchekm_acc_basic():
     X = _toy_data()
     mb = MiniBatchEKMeans(
-        n_clusters=2, random_state=0, n_init=2, max_epochs=5, batch_size=16
+        n_clusters=2, random_state=0, n_init=2, max_epochs=5, batch_size=16, verbose=1
     )
     mb.fit(X)
     assert mb.cluster_centers_.shape == (2, 2)
@@ -56,6 +56,7 @@ def test_minibatchekm_online_basic():
         max_epochs=5,
         batch_size=16,
         learning_rate=0.1,
+        verbose=1,
     )
     mb.fit(X)
     assert mb.cluster_centers_.shape == (2, 2)
