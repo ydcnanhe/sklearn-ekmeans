@@ -4,6 +4,9 @@ sklekmeans - Equilibrium K-Means for scikit-learn
 [![Unit Tests](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml/badge.svg)](https://github.com/ydcnanhe/sklearn-ekmeans/actions/workflows/python-app.yml)
 [![codecov](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans/graph/badge.svg)](https://codecov.io/gh/ydcnanhe/sklearn-ekmeans)
 [![docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://ydcnanhe.github.io/sklearn-ekmeans)
+[![PyPI version](https://img.shields.io/pypi/v/sklekmeans.svg)](https://pypi.org/project/sklekmeans/)
+[![Python versions](https://img.shields.io/pypi/pyversions/sklekmeans.svg)](https://pypi.org/project/sklekmeans/)
+[![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE)
 
 `sklekmeans` provides batch and mini-batch implementations of the
 Equilibrium K-Means (EKMeans) clustering algorithm. The method introduces
@@ -20,61 +23,46 @@ Features
 
 Installation
 ------------
-The project is not yet published on PyPI, so `pip install sklekmeans` will fail with
-"No matching distribution". Install from source instead:
+The package is available on PyPI. Install the base package:
 
-1. Clone the repository:
+```bash
+pip install sklekmeans
+```
+
+Optional extras:
+
+- With numba acceleration (recommended for speed):
+
+```bash
+pip install "sklekmeans[speed]"
+```
+
+- Development tools (tests, lint):
+
+```bash
+pip install "sklekmeans[dev]"
+```
+
+- Docs build dependencies:
+
+```bash
+pip install "sklekmeans[docs]"
+```
+
+- Everything (dev + docs + speed):
+
+```bash
+pip install "sklekmeans[all]"
+```
+
+From source (latest main):
+
 ```bash
 git clone https://github.com/ydcnanhe/sklearn-ekmeans.git
 cd sklearn-ekmeans
-```
-2. (Recommended) Create a fresh virtual environment.
-3. Choose one of the following install modes:
-
-Base (regular installation):
-```bash
-pip install .
-```
-
-Base (editable installation):
-```bash
 pip install -e .
-```
-
-With development tools (tests, lint):
-```bash
-pip install -e .[dev]
-```
-
-With docs build deps:
-```bash
-pip install -e .[docs]
-```
-
-With optional numba acceleration:
-```bash
+# or with extras, e.g. speed
 pip install -e .[speed]
-```
-
-Everything (dev + docs + speed):
-```bash
-pip install -e .[all]
-```
-
-Alternatively you can use the provided requirement files:
-```bash
-pip install -r requirements.txt            # base
-pip install -r requirements-dev.txt        # full stack (includes base)
-```
-
-Install directly from GitHub (no clone) specifying extras, e.g. full stack:
-```bash
-pip install "git+https://github.com/ydcnanhe/sklearn-ekmeans.git#egg=sklekmeans[all]"
-```
-
-If you later publish to PyPI, the simple form will become:
-```bash
-pip install sklekmeans[speed]
 ```
 
 Quick Start
@@ -88,6 +76,15 @@ ekm = EKMeans(n_clusters=3, random_state=0, alpha='dvariance').fit(X)
 print(ekm.cluster_centers_)
 ```
 
+Mini-batch variant with multiple initializations and selection of the best run:
+
+```python
+from sklekmeans import MiniBatchEKMeans
+mb = MiniBatchEKMeans(n_clusters=3, batch_size=256, max_epochs=20, n_init=5, random_state=0)
+mb.fit(X)
+print(mb.cluster_centers_)
+```
+
 Documentation
 -------------
 The latest HTML documentation is hosted on GitHub Pages:
@@ -95,6 +92,8 @@ The latest HTML documentation is hosted on GitHub Pages:
 [ydcnanhe.github.io/sklearn-ekmeans](https://ydcnanhe.github.io/sklearn-ekmeans)
 
 Badges above reflect build status; if the link 404s, wait for the docs CI to finish.
+
+PyPI project page: https://pypi.org/project/sklekmeans/
 
 References
 ----------
