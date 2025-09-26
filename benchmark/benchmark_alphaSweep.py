@@ -22,6 +22,7 @@ from sklekmeans import EKMeans as EKM
 
 try:
     import matplotlib.pyplot as plt
+
     _HAVE_PLT = True
 except Exception:
     _HAVE_PLT = False
@@ -64,11 +65,7 @@ def stats(arr):
 
 print(f"\n=== Benchmark Results ({N_REPEATS} runs) ===")
 print("KMeans ARI       : {:.3f} ± {:.3f}".format(*stats(results_km["ARI"])))
-print(
-    "KMeans Silhouette: {:.3f} ± {:.3f}".format(
-        *stats(results_km["Silhouette"])
-    )
-)
+print("KMeans Silhouette: {:.3f} ± {:.3f}".format(*stats(results_km["Silhouette"])))
 for scale in scale_list:
     m_ari, s_ari = stats(results_ekm[scale]["ARI"])
     m_sil, s_sil = stats(results_ekm[scale]["Silhouette"])
@@ -103,4 +100,6 @@ if _HAVE_PLT:
     plt.tight_layout()
     plt.show()
 else:
-    print('[Info] matplotlib not installed; only text output without plots will be shown.')
+    print(
+        "[Info] matplotlib not installed; only text output without plots will be shown."
+    )
