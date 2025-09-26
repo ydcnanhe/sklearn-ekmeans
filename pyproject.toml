@@ -81,6 +81,22 @@ ignore = [
 [tool.ruff.lint.isort]
 known-first-party = ["sklekmeans"]
 
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sklekmeans*"]
+exclude = [
+  "doc*",
+  "examples*",
+  "benchmark*",
+  "test*",
+  "tests*",
+  "skltemplate*",
+  "*.egg-info*",
+]
+
  [tool.pytest.ini_options]
  addopts = "-v --doctest-modules --cov=sklekmeans --cov-report=term-missing"
  testpaths = ["test"]

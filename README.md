@@ -95,6 +95,18 @@ Badges above reflect build status; if the link 404s, wait for the docs CI to fin
 
 PyPI project page: https://pypi.org/project/sklekmeans/
 
+Build and publish (maintainers)
+-------------------------------
+Local build of artifacts:
+
+```bash
+python -m pip install --upgrade build twine
+python -m build
+python -m twine check dist/*
+```
+
+Publishing to PyPI is automated via GitHub Actions (Trusted Publishing). See `PUBLISHING.md`.
+
 References
 ----------
 - [1] Y. He. *An Equilibrium Approach to Clustering: Surpassing Fuzzy C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems, 2025.
