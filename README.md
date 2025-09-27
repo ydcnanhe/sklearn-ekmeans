@@ -11,7 +11,8 @@ sklekmeans - Equilibrium K-Means for scikit-learn
 `sklekmeans` provides batch and mini-batch implementations of the
 Equilibrium K-Means (EKMeans) clustering algorithm. The method introduces
 an equilibrium weighting scheme that can yield improved robustness on
-imbalanced datasets compared to standard k-means.
+imbalanced datasets compared to standard k-means. The API is compatible
+with sklearn estimators.
 
 Features
 --------

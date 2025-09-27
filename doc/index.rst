@@ -9,9 +9,11 @@ sklekmeans: a scikit-learn extension
 `Issues & Ideas <https://github.com/ydcnanhe/sklearn-ekmeans/issues>`__ |
 `Build Docs Locally <https://github.com/ydcnanhe/sklearn-ekmeans/blob/main/doc/README.md>`__ |
 
-This is the documentation for `sklekmeans` to help at extending
-`scikit-learn`. It provides some information on how to build your own custom
-`scikit-learn` compatible estimators as well as a template to package them.
+This site documents `sklekmeans`, a scikit-learn‑compatible implementation of
+Equilibrium K-Means (EKMeans) designed for robust clustering on imbalanced datasets. 
+It covers installation and a quick start, algorithm details, full-batch and mini-batch 
+training modes, optional numba acceleration, the full Python API compatible with 
+sklearn estimators, and worked examples.
 
 
 .. grid:: 1 2 2 2
