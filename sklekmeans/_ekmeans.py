@@ -32,7 +32,7 @@ from numbers import Integral, Real
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin, _fit_context
-from sklearn.cluster import kmeans_plusplus, KMeans
+from sklearn.cluster import KMeans, kmeans_plusplus
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 from sklearn.utils import check_random_state
@@ -177,7 +177,7 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
             computational cost.
     init : {'k-means', 'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
             Method for initialization.
-        
+
             - 'k-means': run a short standard k-means (Euclidean) to obtain
                 initial centers. When using a non-Euclidean metric, this serves as a
                 heuristic seeding.
@@ -271,7 +271,7 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         "max_iter": [Interval(Integral, 1, None, closed="left")],
         "tol": [Interval(Real, 0, None, closed="neither")],
         "n_init": [Interval(Integral, 1, None, closed="left")],
-    "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
+        "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
         "random_state": [None, Integral],
         "use_numba": [bool],
         "numba_threads": [None, Interval(Integral, 1, None, closed="left")],
@@ -669,7 +669,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         which improves robustness to local minima.
     init : {'k-means', 'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
         Initialization method.
-        
+
         - 'k-means': run a short standard k-means (Euclidean) to obtain
             initial centers. When using a non-Euclidean metric, this serves as a
             heuristic seeding.
@@ -811,7 +811,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         "batch_size": [Interval(Integral, 1, None, closed="left")],
         "max_epochs": [Interval(Integral, 1, None, closed="left")],
         "n_init": [Interval(Integral, 1, None, closed="left")],
-    "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
+        "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
         "init_size": [None, Interval(Integral, 1, None, closed="left")],
         "shuffle": [bool],
         "learning_rate": [None, Interval(Real, 0, None, closed="neither")],
