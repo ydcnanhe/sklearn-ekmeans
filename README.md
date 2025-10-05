@@ -123,7 +123,8 @@ Publishing to PyPI is automated via GitHub Actions (Trusted Publishing). See `PU
 References
 ----------
 - [1] Y. He. *An Equilibrium Approach to Clustering: Surpassing Fuzzy C-Means on Imbalanced Data*, IEEE Transactions on Fuzzy Systems, 2025.
-- [2] Y. He. *Imbalanced Data Clustering Using Equilibrium K-Means*, arXiv, 2024.
+- [2] Y. He. *Semi-supervised equilibrium K-means for imbalanced data clustering*, Knowledge-Based Systems, p.113990, 2025.
+- [3] Y. He. *Imbalanced Data Clustering Using Equilibrium K-Means*, arXiv, 2024.
 
 License
 -------

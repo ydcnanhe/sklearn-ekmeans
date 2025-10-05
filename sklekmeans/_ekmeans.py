@@ -32,7 +32,7 @@ from numbers import Integral, Real
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClusterMixin, TransformerMixin, _fit_context
-from sklearn.cluster import kmeans_plusplus
+from sklearn.cluster import kmeans_plusplus, KMeans
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 from sklearn.utils import check_random_state
@@ -171,16 +171,20 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         data) on the Frobenius norm of the change in ``cluster_centers_``
         to declare convergence.
     n_init : int, default=1
-        Number of random initialisations to perform. The run with the
-        lowest internal equilibrium objective is retained. Increasing
-        ``n_init`` improves robustness to local minima at additional
-        computational cost.
-    init : {'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
-        Method for initialization.
-        * 'k-means++' : use a probabilistic seeding adapted for the
-          chosen metric.
-        * 'random' : choose ``n_clusters`` observations at random.
-        * ndarray : user provided initial centers.
+            Number of random initialisations to perform. The run with the
+            lowest internal equilibrium objective is retained. Increasing
+            ``n_init`` improves robustness to local minima at additional
+            computational cost.
+    init : {'k-means', 'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
+            Method for initialization.
+        
+            - 'k-means': run a short standard k-means (Euclidean) to obtain
+                initial centers. When using a non-Euclidean metric, this serves as a
+                heuristic seeding.
+            - 'k-means++': probabilistic seeding adapted for the chosen metric.
+            - 'random': choose ``n_clusters`` observations at random.
+            - ndarray: user-provided initial centers with shape
+                ``(n_clusters, n_features)``.
     random_state : int, RandomState instance or None, default=None
         Controls the randomness of initial center selection and the
         heuristic alpha sampling (when applicable). Pass an int for
@@ -267,7 +271,7 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         "max_iter": [Interval(Integral, 1, None, closed="left")],
         "tol": [Interval(Real, 0, None, closed="neither")],
         "n_init": [Interval(Integral, 1, None, closed="left")],
-        "init": [StrOptions({"k-means++", "random"}), np.ndarray],
+    "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
         "random_state": [None, Integral],
         "use_numba": [bool],
         "numba_threads": [None, Interval(Integral, 1, None, closed="left")],
@@ -354,7 +358,19 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
                     "init array should have shape (n_clusters, n_features)"
                 )
             return centers.copy()
-        if self.init == "k-means++":
+        if self.init == "k-means":
+            # Use standard KMeans (Euclidean) to seed centers; for
+            # non-Euclidean metrics this serves as a heuristic.
+            km = KMeans(
+                n_clusters=self.n_clusters,
+                init="k-means++",
+                n_init=1,
+                max_iter=100,
+                random_state=rng,
+            )
+            km.fit(X)
+            centers = km.cluster_centers_.astype(float, copy=False)
+        elif self.init == "k-means++":
             if self.metric == "euclidean":
                 centers, _ = kmeans_plusplus(
                     X, self.n_clusters, random_state=rng, sample_weight=None
@@ -651,11 +667,16 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         (derived from ``random_state``) and keep the run with the lowest
         internal equilibrium objective (evaluated on the full dataset),
         which improves robustness to local minima.
-    init : {'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
+    init : {'k-means', 'k-means++', 'random'} or ndarray of shape (n_clusters, n_features), default='k-means++'
         Initialization method.
-        * 'k-means++' : probabilistic seeding adapted for chosen metric.
-        * 'random' : choose ``n_clusters`` observations without replacement.
-        * ndarray : user-specified initial centers.
+        
+        - 'k-means': run a short standard k-means (Euclidean) to obtain
+            initial centers. When using a non-Euclidean metric, this serves as a
+            heuristic seeding.
+        - 'k-means++': probabilistic seeding adapted for chosen metric.
+        - 'random': choose ``n_clusters`` observations without replacement.
+        - ndarray: user-specified initial centers with shape
+            ``(n_clusters, n_features)``.
     init_size : int or None, default=None
         Subsample size used to estimate the ``'dvariance'`` heuristic. If
         ``None`` a size based on ``max(10 * n_clusters, batch_size)`` is
@@ -790,7 +811,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         "batch_size": [Interval(Integral, 1, None, closed="left")],
         "max_epochs": [Interval(Integral, 1, None, closed="left")],
         "n_init": [Interval(Integral, 1, None, closed="left")],
-        "init": [StrOptions({"k-means++", "random"}), np.ndarray],
+    "init": [StrOptions({"k-means", "k-means++", "random"}), np.ndarray],
         "init_size": [None, Interval(Integral, 1, None, closed="left")],
         "shuffle": [bool],
         "learning_rate": [None, Interval(Real, 0, None, closed="neither")],
@@ -855,7 +876,17 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         """Initialise centers for mini-batch optimisation."""
         if isinstance(self.init, np.ndarray):
             return np.asarray(self.init, dtype=float).copy()
-        if self.init == "k-means++":
+        if self.init == "k-means":
+            km = KMeans(
+                n_clusters=self.n_clusters,
+                init="k-means++",
+                n_init=1,
+                max_iter=100,
+                random_state=rng,
+            )
+            km.fit(X)
+            centers = km.cluster_centers_.astype(float, copy=False)
+        elif self.init == "k-means++":
             if self.metric == "euclidean":
                 centers, _ = kmeans_plusplus(
                     X, self.n_clusters, random_state=rng, sample_weight=None

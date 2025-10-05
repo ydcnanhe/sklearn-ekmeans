@@ -1,6 +1,30 @@
 Quick Start
 ===========
 
+Installation
+------------
+
+Install from PyPI:
+
+.. code-block:: bash
+
+        pip install sklekmeans
+
+Optional extras:
+
+- With numba acceleration for speed:
+
+    .. code-block:: bash
+
+            pip install "sklekmeans[speed]"
+
+- Development tools (tests, lint) and docs:
+
+    .. code-block:: bash
+
+            pip install "sklekmeans[dev]"
+            pip install "sklekmeans[docs]"
+
 Install and try EKMeans in a few lines:
 
 .. code-block:: python

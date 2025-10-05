@@ -6,6 +6,7 @@ sklekmeans: a scikit-learn extension
 
 **Useful links**:
 `Source Repository <https://github.com/ydcnanhe/sklearn-ekmeans>`__ |
+`PyPI <https://pypi.org/project/skekmeans/>`__ |
 `Issues & Ideas <https://github.com/ydcnanhe/sklearn-ekmeans/issues>`__ |
 `Build Docs Locally <https://github.com/ydcnanhe/sklearn-ekmeans/blob/main/doc/README.md>`__ |
 
