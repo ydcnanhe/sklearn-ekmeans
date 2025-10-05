@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sklekmeans
-Version: 0.1.2
+Version: 0.1.3
 Summary: Equilibrium K-Means (EKMeans) clustering algorithms compatible with scikit-learn
 Author-email: Yudong He <yhebh@connect.ust.hk>
 License: BSD-3-Clause
