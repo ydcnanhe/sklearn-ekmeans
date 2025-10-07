@@ -145,17 +145,6 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
     numba_threads : int or None, default=None
     verbose : int, default=0
 
-    Notes
-    -----
-    - Supervision is provided via a prior matrix ``F`` of shape
-        ``(n_samples, n_clusters)``. Pass this as ``prior_matrix=F`` to
-        :meth:`fit`. Rows with all zeros indicate unlabeled samples;
-        otherwise values are class probabilities (labeled rows are
-        row-normalized internally when positive).
-    - Objective used for selection across initialisations is:
-      ``sum(U * d^2) + theta * sum(b * (F - U) * d^2)`` where ``b`` is the
-      labeled mask and ``U`` are exp-normalized memberships.
-
     Attributes
     ----------
     cluster_centers_ : ndarray of shape (n_clusters, n_features)
@@ -179,19 +168,38 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
     n_features_in_ : int
         Number of features seen during :meth:`fit`.
 
-    Methods
-    -------
-    fit(X, y=None, *, prior_matrix=None, F=None)
-        Fit the model and learn cluster centers. ``prior_matrix`` supplies the
-        supervision prior (``F`` kept as a backward-compatible alias).
-    predict(X)
-        Return the hard cluster label (nearest center) for each sample.
-    transform(X)
-        Return matrix of distances from samples to cluster centers.
-    fit_predict(X, y=None, *, prior_matrix=None, F=None)
-        Fit the model and return labels in one pass.
-    membership(X)
-        Compute soft membership (row-stochastic responsibilities).
+    Notes
+    -----
+    - Supervision is provided via a prior matrix ``F`` of shape
+        ``(n_samples, n_clusters)``. Pass this as ``prior_matrix=F`` to
+        :meth:`fit`. Rows with all zeros indicate unlabeled samples;
+        otherwise values are class probabilities (labeled rows are
+        row-normalized internally when positive).
+    - Objective used for selection across initialisations is:
+      ``sum(U * d^2) + theta * sum(b * (F - U) * d^2)`` where ``b`` is the
+      labeled mask and ``U`` are exp-normalized memberships.
+    - The average complexity is roughly :math:`O(k^2 n T)` due to the
+        weight update per iteration, where ``k`` is the number of clusters,
+        ``n`` the number of samples and ``T`` the number of iterations. The
+        algorithm can fall into local minima; using ``n_init>1`` is
+        recommended.
+
+    Examples
+    --------
+    >>> from sklekmeans import SSEKM
+    >>> import numpy as np
+    >>> X = np.array([[1, 2], [1, 4], [1, 0],
+    ...               [10, 2], [10, 4], [10, 0]])
+    >>> F = np.array([[0, 1], [0, 0], [0, 0],
+    ...               [1, 0], [0, 0], [0, 0]])
+    >>> ssekm = SSEKM(n_clusters=2, random_state=0, n_init=1).fit(X, prior_matrix=F)
+    >>> ssekm.labels_
+    array([1, 1, 1, 0, 0, 0])
+    >>> ssekm.predict([[0, 0], [12, 3]])
+    array([1, 0])
+    >>> ssekm.cluster_centers_
+    array([[10.,  1.9],
+           [ 1.,  2.]])
     """
 
     _parameter_constraints = {
@@ -343,6 +351,39 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None, *, prior_matrix=None, F=None):
+        """Fit the semi-supervised estimator on X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Prior probability matrix providing supervision. Prefer ``prior_matrix``;
+            ``F`` is kept for backward compatibility. Rows with all zeros denote
+            unlabeled samples; labeled rows are row-normalized internally when
+            positive. Provide either ``prior_matrix`` or ``F`` (not both).
+
+        Returns
+        -------
+                self : SSEKM
+                        Fitted estimator.
+
+        Notes
+        -----
+        - Alpha resolution: if ``alpha='dvariance'``, a heuristic value is computed
+            as ``scale / mean(d^2)`` where ``d^2`` are squared distances to the
+            global mean under the chosen metric.
+        - Theta policy: if ``theta='auto'``, we set ``theta = |N|/|S|`` where
+            ``|N|`` is the number of samples and ``|S|`` is the count of labeled
+            rows (rows with positive sum in the prior). This value is used directly
+            in the supervised objective and in the labeled-row weight blending
+            ``W = W_ekm + theta * b * (F_norm - W_ekm)``.
+        - On success the following attributes are populated: ``cluster_centers_``,
+            ``labels_``, ``n_iter_``, ``objective_``, ``alpha_``, ``theta_super_``,
+            ``W_`` and ``U_``.
+        """
         X = validate_data(
             self,
             X,
@@ -465,6 +506,19 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return self
 
     def predict(self, X):
+        """Predict the closest cluster index for each sample in X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            New samples to assign.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Index of the closest learned cluster center per sample using the
+            configured distance metric. Ties are broken by the first minimum.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -479,6 +533,21 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return np.argmin(D, axis=1)
 
     def transform(self, X):
+        """Compute distances from samples to each cluster center.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples to transform.
+
+        Returns
+        -------
+        distances : ndarray of shape (n_samples, n_clusters)
+            Pairwise distances to ``cluster_centers_`` computed with the
+            estimator's ``metric`` ('euclidean' or 'manhattan'). For Euclidean,
+            this returns non-squared distances consistent with scikit-learn's
+            ``transform`` convention.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -492,11 +561,50 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return _pairwise_distance(X, self.cluster_centers_, self.metric)
 
     def fit_predict(self, X, y=None, *, prior_matrix=None, F=None):
+        """Fit the model and return hard labels for X.
+
+        This is equivalent to calling ``fit(X, ...)`` followed by
+        ``predict(X)`` but may be more efficient.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
+            backward compatibility. Provide only one of them.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Hard cluster assignments for the input samples.
+        """
         if prior_matrix is not None and F is not None:
             raise ValueError("Provide either prior_matrix or F, not both.")
         return self.fit(X, y=y, prior_matrix=prior_matrix, F=F).labels_
 
     def membership(self, X):
+        """Compute soft membership matrix U for samples in X.
+
+        Memberships are computed from distances using the fitted ``alpha_`` via
+        a row-wise normalization of ``exp(-alpha * d^2_shift)`` where
+        ``d^2_shift = d^2 - min(d^2)`` per row for numerical stability.
+        The prior matrix is not used at prediction time for this quantity.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input samples.
+
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Row-stochastic membership matrix (rows sum to 1) reflecting the
+            soft responsibility of each sample to each cluster under the
+            current centers and ``alpha_``.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -512,94 +620,132 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
         E = np.exp(-alpha * D2_shift)
         return E / np.sum(E, axis=1, keepdims=True)
+    
+    def fit_membership(self, X, y=None, *, prior_matrix=None, F=None):
+        """Fit to ``X`` and return the final membership matrix for training data.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input samples.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
+            backward compatibility. Provide only one of them.
+            
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Membership matrix ``U_`` computed on the training data.
+        """
+        return self.fit(X, y, prior_matrix=prior_matrix, F=F).U_
 
 
 class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
     """Mini-batch SSEKM.
 
-    Mini-batch optimisation of the semi-supervised equilibrium k-means
-    objective. Supervision is provided via a prior matrix, using the
-    ``prior_matrix`` keyword to :meth:`fit` and ``prior_matrix_batch`` to
-    :meth:`partial_fit`. Labeled rows in the prior influence weights via the
-    mixing factor ``theta``.
+     Mini-batch optimisation of the semi-supervised equilibrium k-means
+     objective. Supervision is provided via a prior matrix, using the
+     ``prior_matrix`` keyword to :meth:`fit` and ``prior_matrix_batch`` to
+     :meth:`partial_fit`. Labeled rows in the prior influence weights via the
+     mixing factor ``theta``.
 
-    Parameters
-    ----------
-    n_clusters : int, default=8
-    metric : {'euclidean', 'manhattan'}, default='euclidean'
-    alpha : float or {'dvariance'}, default='dvariance'
-        Equilibrium weighting parameter (``'dvariance'`` uses a subsample to
-        estimate a heuristic value scaled by ``scale``).
-    scale : float, default=2.0
-        Scaling factor for the heuristic alpha.
-    theta : float or {'auto'}, default='auto'
-        Supervision strength. ``'auto'`` sets ``theta = |N| / |S|``. Numeric
-        values are used directly in both the objective and the labeled-row
-        weight update.
-    batch_size : int, default=256
-    max_epochs : int, default=10
-    n_init : int, default=1
-    init : {'k-means', 'k-means++', 'random'} or ndarray, default='k-means++'
-    init_size : int or None, default=None
-    shuffle : bool, default=True
-    learning_rate : float or None, default=None
-    tol : float, default=1e-4
-    reassignment_ratio : float, default=0.0
-    reassign_patience : int, default=3
-    verbose : int, default=0
-    monitor_size : int or None, default=1024
-    print_every : int, default=1
-    use_numba : bool, default=False
-    numba_threads : int or None, default=None
-    random_state : int or None, default=None
+     Parameters
+     ----------
+     n_clusters : int, default=8
+     metric : {'euclidean', 'manhattan'}, default='euclidean'
+     alpha : float or {'dvariance'}, default='dvariance'
+         Equilibrium weighting parameter (``'dvariance'`` uses a subsample to
+         estimate a heuristic value scaled by ``scale``).
+     scale : float, default=2.0
+         Scaling factor for the heuristic alpha.
+     theta : float or {'auto'}, default='auto'
+         Supervision strength. ``'auto'`` sets ``theta = |N| / |S|``. Numeric
+         values are used directly in both the objective and the labeled-row
+         weight update.
+     batch_size : int, default=256
+     max_epochs : int, default=10
+     n_init : int, default=1
+     init : {'k-means', 'k-means++', 'random'} or ndarray, default='k-means++'
+     init_size : int or None, default=None
+     shuffle : bool, default=True
+     learning_rate : float or None, default=None
+     tol : float, default=1e-4
+     reassignment_ratio : float, default=0.0
+     reassign_patience : int, default=3
+     verbose : int, default=0
+     monitor_size : int or None, default=1024
+     print_every : int, default=1
+     use_numba : bool, default=False
+     numba_threads : int or None, default=None
+     random_state : int or None, default=None
 
-    Notes
-    -----
-    - Provide the full-dataset prior using ``prior_matrix`` to :meth:`fit`,
-      or mini-batch priors using ``prior_matrix_batch`` to
-      :meth:`partial_fit`.
-    - Unlabeled rows are all zeros; labeled rows are row-normalized when
-      positive.
-    - The monitoring objective returned in ``objective_approx_`` includes the
-      supervised term scaled by ``theta`` when a prior is provided.
+     Attributes
+     ----------
+     cluster_centers_ : ndarray of shape (n_clusters, n_features)
+         Final centers after training.
+     labels_ : ndarray of shape (n_samples,)
+         Hard assignment labels for the training data (available after :meth:`fit`).
+     alpha_ : float
+         Resolved alpha value.
+     theta_super_ : float
+         Resolved supervision strength used (``'auto'`` or numeric).
+     objective_approx_ : list of float
+         Epoch-wise approximate objectives measured on a monitoring subset.
+     counts_ : ndarray of shape (n_clusters,)
+         Accumulated batch weights per cluster (accumulation mode; present after :meth:`fit`).
+     sums_ : ndarray of shape (n_clusters, n_features)
+         Accumulated weighted sums per cluster (accumulation mode; present after :meth:`fit`).
+     W_, U_ : ndarrays
+         Final equilibrium weights and memberships for the full training data (set by :meth:`fit`).
+     n_epochs_ : int
+         Number of epochs run in the best initialisation.
+     n_features_in_ : int
+         Number of features seen during the first call to :meth:`fit` or :meth:`partial_fit`.
 
-    Attributes
-    ----------
-    cluster_centers_ : ndarray of shape (n_clusters, n_features)
-        Final centers after training.
-    labels_ : ndarray of shape (n_samples,)
-        Hard assignment labels for the training data (available after :meth:`fit`).
-    alpha_ : float
-        Resolved alpha value.
-    theta_super_ : float
-        Resolved supervision strength used (``'auto'`` or numeric).
-    objective_approx_ : list of float
-        Epoch-wise approximate objectives measured on a monitoring subset.
-    counts_ : ndarray of shape (n_clusters,)
-        Accumulated batch weights per cluster (accumulation mode; present after :meth:`fit`).
-    sums_ : ndarray of shape (n_clusters, n_features)
-        Accumulated weighted sums per cluster (accumulation mode; present after :meth:`fit`).
-    W_, U_ : ndarrays
-        Final equilibrium weights and memberships for the full training data (set by :meth:`fit`).
-    n_epochs_ : int
-        Number of epochs run in the best initialisation.
-    n_features_in_ : int
-        Number of features seen during the first call to :meth:`fit` or :meth:`partial_fit`.
+     Notes
+     -----
+     - Provide the full-dataset prior using ``prior_matrix`` to :meth:`fit`,
+       or mini-batch priors using ``prior_matrix_batch`` to
+       :meth:`partial_fit`.
+     - Unlabeled rows are all zeros; labeled rows are row-normalized when
+       positive.
+     - The monitoring objective returned in ``objective_approx_`` includes the
+       supervised term scaled by ``theta`` when a prior is provided.
 
-    Methods
-    -------
-    fit(X, y=None, *, prior_matrix=None, F=None)
-        Run full mini-batch training with optional prior supervision.
-    partial_fit(X_batch, y=None, *, prior_matrix_batch=None, F_batch=None)
-        Update model parameters using a single mini-batch and optional batch prior.
-    predict(X)
-        Return hard cluster labels for samples.
-    transform(X)
-        Return distances from samples to cluster centers.
-    fit_predict(X, y=None, *, prior_matrix=None, F=None)
-        Fit the model and return labels for X.
-    membership(X)
-        Compute soft membership for input samples.
+     Examples
+     --------
+     >>> from sklekmeans import MiniBatchSSEKM
+     >>> import numpy as np
+     >>> X = np.array([[1, 2], [1, 4], [1, 0],
+     ...               [4, 2], [4, 0], [4, 4],
+     ...               [4, 5], [0, 1], [2, 2],
+     ...               [3, 2], [5, 5], [1, -1]])
+     >>> # manually fit on batches
+     >>> Fb1 = np.zeros((6, 2), dtype=float)
+     >>> Fb2 = np.zeros((6, 2), dtype=float)
+     >>> Fb1[0,0] = 1.0
+     >>> Fb2[0,1] = 1.0
+     >>> ssekm = MiniBatchSSEKM(n_clusters=2, random_state=0, batch_size=6)
+     >>> ssekm.partial_fit(X[:6], prior_matrix_batch=Fb1)
+     >>> ssekm.partial_fit(X[6:], prior_matrix_batch=Fb2)
+     >>> ssekm.cluster_centers_
+     array([[0.16003672, 0.03460558],
+         [5.84568854, 5.21509585]])
+     >>> ssekm.predict([[0, 0], [4, 4]])
+     array([0, 1])
+     >>> # fit on the whole data
+     >>> F = np.concatenate((Fb1, Fb2), axis=0)
+     ssekm = MiniBatchSSEKM(n_clusters=2,
+     ...                     random_state=0,
+     ...                     batch_size=6,
+     ...                     max_epochs=10).fit(X, prior_matrix=F)
+    >>> ssekm.cluster_centers_
+     array([[1.25126245, 0.55312346],
+         [3.54580155, 3.51798824]])
+     >>> ssekm.predict([[0, 0], [4, 4]])
+     array([0, 1])
     """
 
     _parameter_constraints = {
@@ -766,6 +912,27 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None, *, prior_matrix=None, F=None):
+        """Train the mini-batch semi-supervised estimator on the full dataset.
+
+        Runs multiple epochs of mini-batch updates. Supervision can be provided
+        via ``prior_matrix`` (preferred) or ``F``; provide only one. Unlabeled
+        rows are all zeros; labeled rows are row-normalized internally when
+        positive.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Prior probability matrix for supervision.
+
+        Returns
+        -------
+        self : MiniBatchSSEKM
+            Fitted estimator.
+        """
         X = validate_data(
             self,
             X,
@@ -993,7 +1160,9 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         if F_batch is not None:
             Fb = np.asarray(F_batch, dtype=float)
             if Fb.shape[0] != Xb.shape[0] or Fb.shape[1] != K:
-                raise ValueError("F_batch must have shape (batch_size, n_clusters)")
+                raise ValueError(
+                    f"F_batch must have shape ({Xb.shape[0]}, {K}) to match X_batch rows and n_clusters; got {Fb.shape}"
+                )
             b = (np.sum(Fb, axis=1) > 0).astype(float)[:, None]
             row_sum = np.sum(Fb, axis=1, keepdims=True)
             F_norm = np.divide(Fb, row_sum, out=np.zeros_like(Fb), where=row_sum > 0)
@@ -1052,12 +1221,43 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return self
 
     def fit_predict(self, X, y=None, *, prior_matrix=None, F=None):
+        """Fit the model and return hard labels for X.
+
+        Performs full mini-batch training (up to ``max_epochs``) and returns
+        the predicted cluster index for each sample in ``X``.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
+            backward compatibility. Provide only one of them.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Hard cluster assignments for the input samples.
+        """
         if prior_matrix is not None and F is not None:
             raise ValueError("Provide either prior_matrix or F, not both.")
         return self.fit(X, y=y, prior_matrix=prior_matrix, F=F).labels_
 
     def predict(self, X):
-        """Predict the closest cluster each sample in X belongs to."""
+        """Predict the closest cluster each sample in X belongs to.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            New samples to assign.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Indices of the nearest centers under the configured metric.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1072,7 +1272,18 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return np.argmin(D, axis=1)
 
     def transform(self, X):
-        """Transform X to a cluster-distance space (pairwise distances)."""
+        """Transform X to a cluster-distance space (pairwise distances).
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples to transform.
+
+        Returns
+        -------
+        distances : ndarray of shape (n_samples, n_clusters)
+            Pairwise distances to ``cluster_centers_`` using the estimator's metric.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1086,7 +1297,19 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         return _pairwise_distance(X, self.cluster_centers_, self.metric)
 
     def membership(self, X):
-        """Soft membership (U) computed from distances using current alpha_."""
+        """Soft membership (U) computed from distances using current ``alpha_``.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples for which to compute memberships.
+
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Row-stochastic membership matrix computed as normalized
+            ``exp(-alpha * d^2_shift)`` per row.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1102,3 +1325,23 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
         E = np.exp(-alpha * D2_shift)
         return E / np.sum(E, axis=1, keepdims=True)
+    
+    def fit_membership(self, X, y=None, *, prior_matrix=None, F=None):
+        """Fit to ``X`` and return the final membership matrix for training data.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input samples.
+        y : Ignored
+            Present for API consistency.
+        prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
+            Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
+            backward compatibility. Provide only one of them.
+            
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Membership matrix ``U_`` computed on the training data.
+        """
+        return self.fit(X, y, prior_matrix=prior_matrix, F=F).U_

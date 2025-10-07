@@ -221,23 +221,6 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         Number of features seen during :meth:`fit`. Set by the first call to
         :meth:`fit` and used for input validation in subsequent operations.
 
-    Methods
-    -------
-    fit(X, y=None)
-        Fit the model and learn cluster centers.
-    predict(X)
-        Return the hard cluster label (nearest center) for each sample.
-    transform(X)
-        Return matrix of distances from samples to cluster centers.
-    fit_predict(X, y=None)
-        Fit the model and return training labels in one pass.
-    membership(X)
-        Compute soft membership (row-normalized responsibilities).
-    fit_membership(X, y=None)
-        Fit the model and return the training membership matrix.
-
-    (Internal helpers: `_resolve_alpha`, `_init_centers`, `_calc_weight`, `_objective` are internal and not public API.)
-
     Notes
     -----
     The average complexity is roughly :math:`O(k^2 n T)` due to the
@@ -569,7 +552,9 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         Returns
         -------
         distances : ndarray of shape (n_samples, n_clusters)
-            Pairwise distances to `cluster_centers_` using the configured metric.
+            Pairwise distances to ``cluster_centers_`` using the configured
+            ``metric`` ('euclidean' or 'manhattan'). For Euclidean, this returns
+            non-squared distances (consistent with scikit-learn's convention).
         """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
@@ -587,12 +572,28 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         """Fit the model to ``X`` and return cluster indices.
 
         Equivalent to calling ``fit(X)`` followed by ``predict(X)`` but
-        more efficient.
+        may be more efficient.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Hard cluster assignments for the input samples.
         """
         return self.fit(X, y).labels_
 
     def membership(self, X):
         """Return membership (soft assignment) matrix.
+
+        Memberships are computed from distances using the fitted ``alpha_`` via
+        a row-wise normalization of ``exp(-alpha * d^2_shift)`` where
+        ``d^2_shift = d^2 - min(d^2)`` per row for numerical stability.
 
         Parameters
         ----------
@@ -622,7 +623,20 @@ class EKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         return U
 
     def fit_membership(self, X, y=None):
-        """Fit the model and return the membership matrix for training data."""
+        """Fit the model and return the membership matrix for training data.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input samples.
+        y : Ignored
+            Present for API consistency.
+
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Row-stochastic soft assignment matrix (rows sum to 1).
+        """
         return self.fit(X, y).U_
 
 
@@ -748,24 +762,6 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         :meth:`partial_fit`. Ensures consistent dimensionality across
         incremental updates and predictions.
 
-    Methods
-    -------
-    fit(X, y=None)
-        Run full mini-batch training until convergence or max epochs.
-    partial_fit(X_batch, y=None)
-        Update model parameters using a single mini-batch.
-    predict(X)
-        Return hard cluster labels for samples.
-    transform(X)
-        Return distances from samples to cluster centers.
-    membership(X)
-        Compute soft membership (row-normalized responsibilities).
-    fit_predict(X, y=None)
-        Fit the model and return hard labels for X.
-    fit_membership(X, y=None)
-        Fit the model and return the membership matrix for the training data.
-
-    (Internal helpers: `_init_centers`, `_resolve_alpha`, `_calc_weight`, `_approx_objective` are internal implementation details.)
     Notes
     -----
     The approximate objective is tracked on a monitoring subset when
@@ -1207,7 +1203,18 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         return self
 
     def predict(self, X):
-        """Assign each sample in ``X`` to the closest learned center."""
+        """Assign each sample in ``X`` to the closest learned center.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            New samples to assign.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Indices of the nearest centers under the configured metric.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1232,7 +1239,20 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         return labels
 
     def transform(self, X):
-        """Compute distances from samples to cluster centers."""
+        """Compute distances from samples to cluster centers.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples to transform.
+
+        Returns
+        -------
+        distances : ndarray of shape (n_samples, n_clusters)
+            Pairwise distances to ``cluster_centers_`` using the estimator's
+            ``metric`` ('euclidean' or 'manhattan'). For Euclidean, distances
+            are non-squared.
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1246,7 +1266,22 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         return _pairwise_distance(X, self.cluster_centers_, self.metric)
 
     def membership(self, X):
-        """Compute soft membership matrix for samples in ``X``."""
+        """Compute soft membership matrix for samples in ``X``.
+
+        Memberships use the fitted ``alpha_`` and a row-wise normalization of
+        ``exp(-alpha * d^2_shift)`` where ``d^2_shift`` subtracts each row's
+        minimum for numerical stability.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples for which to compute memberships.
+
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Row-stochastic membership matrix (rows sum to 1).
+        """
         check_is_fitted(self, "cluster_centers_")
         X = validate_data(
             self,
@@ -1264,9 +1299,35 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
         return E / (np.sum(E, axis=1, keepdims=True) + np.finfo(float).eps)
 
     def fit_predict(self, X, y=None):
-        """Fit to ``X`` and return hard assignments."""
+        """Fit to ``X`` and return hard assignments.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : Ignored
+            Present for API consistency.
+
+        Returns
+        -------
+        labels : ndarray of shape (n_samples,)
+            Hard cluster assignments for the input samples.
+        """
         return self.fit(X, y).predict(X)
 
     def fit_membership(self, X, y=None):
-        """Fit to ``X`` and return the final membership matrix for training data."""
+        """Fit to ``X`` and return the final membership matrix for training data.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input samples.
+        y : Ignored
+            Present for API consistency.
+            
+        Returns
+        -------
+        U : ndarray of shape (n_samples, n_clusters)
+            Membership matrix ``U_`` computed on the training data.
+        """
         return self.fit(X, y).U_

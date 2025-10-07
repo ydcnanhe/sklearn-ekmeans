@@ -110,9 +110,35 @@ def test_minibatch_ssekmeans_basic_shapes():
     assert np.allclose(mb.U_.sum(axis=1), 1.0, atol=1e-6)
 
 
+def test_fit_membership():
+    X = _toy_data()
+    ssekm_nb = SSEKM(
+        n_clusters=2,
+        random_state=0,
+        n_init=2,
+        max_iter=50,
+        use_numba=True,
+        numba_threads=1,
+    )
+    mbssekm_nb = MiniBatchSSEKM(
+        n_clusters=2,
+        random_state=0,
+        n_init=2,
+        max_epochs=5,
+        batch_size=16,
+        use_numba=True,
+        numba_threads=1,
+    )
+    U_ssekm = ssekm_nb.fit_membership(X)
+    U_mbssekm = mbssekm_nb.fit_membership(X)
+    assert U_ssekm.shape == (X.shape[0], 2)
+    assert U_mbssekm.shape == (X.shape[0], 2)
+
+
 if __name__ == "__main__":
     test_ssekm_estimator_checks()
     test_ssekmeans_unlabeled_equivalence_to_ekm()
     test_ssekmeans_supervised_rows_follow_F_onehot_theta1()
     test_ssekmeans_theta_zero_matches_ekm()
     test_minibatch_ssekmeans_basic_shapes()
+    test_fit_membership()

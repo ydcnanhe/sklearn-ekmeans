@@ -70,7 +70,7 @@ del doc\sg_execution_times.rst
 ## Tips
 - If imports fail during the build, ensure the repository root is on `PYTHONPATH` or that you installed the package with `pip install -e .`.
 - If images or styles don't appear, verify static assets under `doc/_static/` and that `html_css_files = ["css/sklekmeans.css"]` is set in `doc/conf.py`.
-- To speed up gallery builds while iterating, you can temporarily set `plot_gallery = "False"` in `doc/conf.py`.
+- To speed up gallery builds while iterating, you can temporarily set `plot_gallery = False` in `doc/conf.py`.
 
 ## Git ignores (build outputs)
 
