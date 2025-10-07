@@ -111,8 +111,8 @@ intersphinx_mapping = {
 
 # -- Options for sphinx-gallery -----------------------------------------------
 
-# Generate the plot for the gallery (string expected by sphinx-gallery settings)
-plot_gallery = "True"
+# Generate the plot for the gallery
+plot_gallery = True
 
 sphinx_gallery_conf = {
     # Disable code link embedding by leaving doc_module empty
@@ -123,4 +123,7 @@ sphinx_gallery_conf = {
     # No external reference URLs for code linking
     "reference_url": {},
     "remove_config_comments": True,
+    # Ensure examples run and are ordered by file name (so numeric prefixes work)
+    "filename_pattern": r".*",
+    "within_subsection_order": "FileNameSortKey",
 }

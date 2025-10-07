@@ -16,11 +16,12 @@ with sklearn estimators.
 
 Features
 --------
-* Drop-in scikit-learn compatible estimators: `EKMeans`, `MiniBatchEKMeans`.
+* Drop-in scikit-learn compatible estimators: `EKMeans`, `MiniBatchEKMeans`, `SSEKM`, `MiniBatchSSEKM` (semi-supervised).
 * Supports Euclidean and Manhattan distances.
-* Heuristic alpha selection via `alpha='dvariance'`.
+* Heuristic alpha selection via `alpha='dvariance'` (default).
 * Mini-batch variant with accumulation or online update modes.
 * Soft memberships (`membership`) and equilibrium weights (`W_`).
+* Semi-supervised learning via a prior matrix (`prior_matrix`, shape `(n_samples, n_clusters)`), with supervision strength `theta` (default `theta='auto' = |N|/|S|`).
 
 Installation
 ------------
@@ -85,7 +86,7 @@ from sklekmeans import EKMeans
 import numpy as np
 
 X = np.random.rand(200, 2)
-ekm = EKMeans(n_clusters=3, random_state=0, alpha='dvariance').fit(X)
+ekm = EKMeans(n_clusters=3, random_state=0).fit(X)
 print(ekm.cluster_centers_)
 ```
 
@@ -96,6 +97,24 @@ from sklekmeans import MiniBatchEKMeans
 mb = MiniBatchEKMeans(n_clusters=3, batch_size=256, max_epochs=20, n_init=5, random_state=0)
 mb.fit(X)
 print(mb.cluster_centers_)
+```
+
+Semi-supervised variant (SSEKM)
+-------------------------------
+Use `prior_matrix` to inject partial labels or weak supervision. Unlabeled rows are all zeros; labeled rows provide per-class probabilities (e.g., one-hot).
+
+```python
+from sklekmeans import SSEKM
+import numpy as np
+
+X = np.random.rand(100, 2)
+K = 3
+prior = np.zeros((X.shape[0], K))
+prior[:10, 0] = 1.0  # first 10 samples known to be in class 0
+
+model = SSEKM(n_clusters=K, theta='auto', random_state=0)
+model.fit(X, prior_matrix=prior)
+print(model.cluster_centers_)
 ```
 
 Documentation

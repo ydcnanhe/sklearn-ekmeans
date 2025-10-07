@@ -12,3 +12,5 @@ Clustering Estimators
 
     EKMeans
     MiniBatchEKMeans
+    SSEKM
+    MiniBatchSSEKM
