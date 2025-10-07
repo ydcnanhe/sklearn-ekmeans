@@ -12,8 +12,8 @@ sklekmeans: a scikit-learn extension
 
 This site documents `sklekmeans`, a scikit-learn‑compatible implementation of
 Equilibrium K-Means (EKMeans) designed for robust clustering on imbalanced datasets. 
-It covers installation and a quick start, algorithm details, full-batch， mini-batch，
-and semi-supervised training modes, optional numba acceleration, the full Python API 
+It covers installation and a quick start, algorithm details, full-batch, mini-batch, and
+semi-supervised training modes, optional numba acceleration, the full Python API 
 compatible with sklearn estimators, and worked examples.
 
 
