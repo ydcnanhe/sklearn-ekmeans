@@ -1324,7 +1324,7 @@ class MiniBatchEKMeans(TransformerMixin, ClusterMixin, BaseEstimator):
             Input samples.
         y : Ignored
             Present for API consistency.
-            
+
         Returns
         -------
         U : ndarray of shape (n_samples, n_clusters)

@@ -620,7 +620,7 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
         E = np.exp(-alpha * D2_shift)
         return E / np.sum(E, axis=1, keepdims=True)
-    
+
     def fit_membership(self, X, y=None, *, prior_matrix=None, F=None):
         """Fit to ``X`` and return the final membership matrix for training data.
 
@@ -633,7 +633,7 @@ class SSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
             Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
             backward compatibility. Provide only one of them.
-            
+
         Returns
         -------
         U : ndarray of shape (n_samples, n_clusters)
@@ -1325,7 +1325,7 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         D2_shift = D2 - D2.min(axis=1, keepdims=True)
         E = np.exp(-alpha * D2_shift)
         return E / np.sum(E, axis=1, keepdims=True)
-    
+
     def fit_membership(self, X, y=None, *, prior_matrix=None, F=None):
         """Fit to ``X`` and return the final membership matrix for training data.
 
@@ -1338,7 +1338,7 @@ class MiniBatchSSEKM(TransformerMixin, ClusterMixin, BaseEstimator):
         prior_matrix, F : array-like of shape (n_samples, n_clusters), optional
             Supervision prior. Prefer ``prior_matrix``; ``F`` is kept for
             backward compatibility. Provide only one of them.
-            
+
         Returns
         -------
         U : ndarray of shape (n_samples, n_clusters)
