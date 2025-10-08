@@ -154,8 +154,7 @@ def test_minibatch_ssekmeans_partial_fit():
         learning_rate=0.1,
         verbose=1,
     )
-    mb.partial_fit(X, F=F)
-    U = mb.membership(X)
+    mb.partial_fit(X, F_batch=F)
     assert mb.cluster_centers_.shape == (K, X.shape[1])
     assert hasattr(mb, "U_") and hasattr(mb, "W_")
     assert np.allclose(mb.U_.sum(axis=1), 1.0, atol=1e-6)
