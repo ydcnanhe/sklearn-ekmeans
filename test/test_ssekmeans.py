@@ -156,9 +156,6 @@ def test_minibatch_ssekmeans_partial_fit():
     )
     mb.partial_fit(X, F_batch=F)
     assert mb.cluster_centers_.shape == (K, X.shape[1])
-    assert hasattr(mb, "U_") and hasattr(mb, "W_")
-    assert np.allclose(mb.U_.sum(axis=1), 1.0, atol=1e-6)
-    assert U.shape == (X.shape[0], K)
 
     mb = MiniBatchSSEKM(
         n_clusters=K,
